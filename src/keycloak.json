@@ -1,0 +1,8 @@
+{
+  "realm": "rheumapoc",
+  "auth-server-url": "https://keycloak.default.152.70.182.26.nip.io/auth/",
+  "ssl-required": "external",
+  "resource": "edge1",
+  "public-client": true,
+  "confidential-port": 0
+}

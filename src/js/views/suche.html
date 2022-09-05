@@ -1,0 +1,245 @@
+<!--
+ Copyright (c) 2014, 2021, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+-->
+<div class="oj-hybrid-padding">
+    <h4 class="oj-header-border">Forschungsdaten abfragen</h4>
+    <div class="oj-panel oj-flex oj-sm-flex-items-1" >
+        <div class="oj-sm-padding-4x oj-flex oj-flex-item oj-sm-align-items-flex-start" style="min-height: 65vH;">
+            <div class="oj-panel oj-flex oj-sm-flex-direction-column oj-sm-align-items-center oj-flex-item oj-panel-shadow-sm " >
+                <oj-radioset class="oj-flex-item"
+                             id="suchtypRadioset"
+                             label-hint="Radioset No Visual Label"
+                             label-edge="none"
+                             value="[[suchtyp]]">
+                    <oj-option value="lokal">Lokale Suche</oj-option>
+                    <oj-option value="verteilt">Verteilte Suche</oj-option>
+                </oj-radioset>
+            </div>
+            <div class="oj-panel oj-flex-item oj-flex oj-sm-flex-direction-column oj-sm-align-items-center oj-panel-shadow-sm " style="min-height: 10vH;">
+                <oj-button id="btnSearch" class="oj-flex-item" chroming="borderless" on-oj-action="[[resetButtonClicked]]">
+                    <span><oj-bind-text value="Such-Werte zurücksetzen"> </oj-bind-text></span>
+                </oj-button>
+            </div>
+            <div class="oj-panel oj-flex-item oj-flex oj-sm-flex-direction-column oj-sm-align-items-center oj-panel-shadow-sm " style="min-height: 30vH;">
+                <oj-button id="btnSearch" class="oj-flex-item" chroming="borderless" on-oj-action="[[searchButtonClicked]]">
+                    <span class="oj-flex-item " >
+                        <img  src="../img/patientsearch.png" width="200px;"><br/>
+                        <oj-bind-text value="[[suchestart]]"></oj-bind-text></img>
+                    </span>
+
+                </oj-button>
+            </div>
+        </div>
+        <div class="oj-panel oj-flex-item oj-sm-padding-4x" style="width: 1px; min-width: 75%;">
+            <oj-accordion id="a1">
+                <oj-collapsible id="c1" expanded>
+                    <h3 slot="header">
+                        Identifizierende Daten
+                    </h3>
+
+                    <div class="oj-flex-item oj-flex oj-panel">
+                        <oj-form-layout  class="oj-flex-item oj-flex">
+                            <oj-label >Patient ID</oj-label>
+                            <oj-input-text class="oj-flex-item"
+                                           value="{{kisIdentifier}}"
+                                           label-hint="PatNr"
+                                           label-edge="inside"></oj-input-text>
+                        </oj-form-layout>
+                    </div>
+                    <div class="oj-flex-item oj-flex  oj-panel">
+                        <oj-form-layout  class="oj-flex-item oj-flex">
+                            <oj-label >Quintupel</oj-label>
+                            <div class="oj-flex-item oj-flex  oj-sm-flex-items-1">
+                                <oj-input-text class="oj-flex-item "
+                                               value="{{preName}}"
+                                               label-hint="Vorname"
+                                               label-edge="inside"></oj-input-text>
+                                <oj-input-text class="oj-flex-item"
+                                               value="{{sureName}}"
+                                               label-hint="Nachname"
+                                               label-edge="inside"></oj-input-text>
+                                <oj-input-text class="oj-flex-item"
+                                               value="{{birthName}}"
+                                               label-hint="Geburtsname"
+                                               label-edge="inside"></oj-input-text>
+                            </div>
+                            <div class="oj-flex-item oj-flex oj-sm-flex-items-1 ">
+                                <oj-input-date class="oj-flex-item " value="{{birthDate}}" label-hint="Geburtsdatum" autocomplete="off"></oj-input-date>
+
+                                <oj-input-text class="oj-flex-item "
+                                               value="{{birthPlace}}"
+                                               label-hint="Geburtsort"
+                                               label-edge="inside"></oj-input-text>
+                            </div>
+                        </oj-form-layout>
+                    </div>
+                </oj-collapsible>                
+                <oj-collapsible id="c1" >
+                    <h3 slot="header">
+                        Basisdaten
+                    </h3>
+                    <div class="oj-flex-item oj-flex  ">
+
+
+                        <oj-form-layout  class="oj-flex-item oj-flex oj-sm-flex-items-1 oj-panel" direction="column">
+                            <oj-label class="oj-flex-item">Geschlecht</oj-label>
+                            <oj-radioset class="oj-flex-item" id="geschlechtRadio" value="{{gender}}" labelled-by="mainlabelid">
+                                <oj-option id="mann" value="2">männlich</oj-option>
+                                <oj-option id="frau" value="1">weiblich</oj-option>
+                                <oj-option id="divers" value="3">unbestimmt</oj-option>
+                            </oj-radioset>
+                        </oj-form-layout>
+                        <oj-form-layout  class="oj-flex-item oj-flex oj-panel">
+                            <oj-label class="oj-flex-item">Gewicht</oj-label>
+                            <div class="oj-flex-item oj-flex  oj-sm-flex-items-1 ">
+                                <oj-input-text class="oj-flex-item"
+                                               value="0"
+                                               label-hint="zwischen kg"
+                                               label-edge="inside"></oj-input-text>
+                                <oj-input-text class="oj-flex-item"
+                                               value="0"
+                                               label-hint="und kg"
+                                               label-edge="inside"></oj-input-text>
+                            </div>
+                            <oj-label class=""oj-flex-item">Größe</oj-label>
+                            <div  class="oj-flex-item oj-flex  oj-sm-flex-items-1">
+                                <oj-input-text class="oj-flex-item"
+                                               value="0"
+                                               label-hint="zwischen cm"
+                                               label-edge="inside"></oj-input-text>
+                                <oj-input-text class="oj-flex-item"
+                                               value="0"
+                                               label-hint="und cm"
+                                               label-edge="inside"></oj-input-text>
+                            </div>
+                        </oj-form-layout>
+
+                        <oj-form-layout  class="oj-flex-item oj-flex oj-sm-flex-items-1 oj-panel" direction="column">
+                            <oj-label class="oj-flex-item">Erste Symptome</oj-label>
+                            <div class="oj-flex-item oj-flex  oj-sm-flex-items-1 oj-sm-align-items-center">
+
+                                <oj-radioset class="oj-flex-item" value="" labelled-by="mainlabelid">
+                                    <oj-option id="vor" value="lt">vor</oj-option>
+                                    <oj-option id="nach" value="gt">nach</oj-option>
+                                </oj-radioset>
+
+                                <oj-input-date class="oj-flex-item" label-hint="Datum" autocomplete="off"></oj-input-date>
+
+                            </div>
+                        </oj-form-layout>
+
+                        <oj-form-layout  class="oj-flex-item oj-flex oj-sm-flex-items-1 oj-panel" direction="column">
+                            <oj-label class="oj-flex-item">Rauchstatus</oj-label>
+                            <div class="oj-flex-item oj-flex">
+                                <oj-radioset  id="rauchRadio" value="{{smokingStatus}}" labelled-by="mainlabelid">
+                                    <oj-option  value="99">Nichtraucher</oj-option>
+                                    <oj-option  value="1">Ex-Raucher</oj-option>
+                                    <oj-option  value="2">gelegentlich</oj-option>
+                                    <oj-option  value="3">häufig</oj-option>
+                                    <oj-option  value="4">Kettenraucher</oj-option>
+                                </oj-radioset>
+                            </div>
+                        </oj-form-layout>
+                    </div>
+                </oj-collapsible>
+                <oj-collapsible id="c3">
+                    <h3 slot="header">
+                        Komorbiditäten </h3>
+                    <div>
+
+                        <oj-combobox-many
+                            id="morbsbox1"
+                            value='{{ morbs }}'
+                            label-hint="Such-Eingabe"
+                            options="{{ morbsListProvider }}"
+                            class="oj-form-control-max-width-md">
+                        </oj-combobox-many>
+                        <oj-bind-text value="[[JSON.stringify(morbs())]]"></oj-bind-text>
+
+                    </div>
+                </oj-collapsible>
+                <oj-collapsible id="c4">
+                    <h3 slot="header">Medikationen</h3>
+                    <div>
+                        <oj-combobox-many
+                            id="therabox1"
+                            value='{{ theras }}'
+                            label-hint="Such-Eingabe"
+                            options="[[ medListProvider ]]"
+                            class="oj-form-control-max-width-md">
+                        </oj-combobox-many>
+                        <oj-bind-text value="[[JSON.stringify(theras())]]"></oj-bind-text>
+
+                    </div>
+                </oj-collapsible>
+            </oj-accordion>
+        </div>
+    </div>
+</div>
+<div id="popupWrapper">
+    <oj-popup
+        id="searchpopup1"
+        class="demo-popup"
+        auto-dismiss="none"
+        modality="modal"
+        position.my.horizontal="center"
+        position.my.vertical="center"
+        position.at.horizontal="center"
+        position.at.vertical="center"
+        position.of="window"
+        tail="none">
+        <div class="demo-popup-body">
+            <div class="demo-popup-header">
+                <oj-button
+                    id="btnCancel"
+                    class="oj-button-sm"
+                    display="icons"
+                    on-oj-action="[[cancelListener]]">
+                    <span slot="startIcon" class="oj-ux-ico-close"></span>
+                    Cancel
+                </oj-button>
+            </div>
+            <div class="demo-popup-content oj-sm-padding-2x">
+                <p>
+                    Bitte mindestens ein Suchkriterum eingeben !
+                </p>
+            </div>
+        </div>
+    </oj-popup>
+</div>
+<div id="popupCountWrapper">
+    <oj-popup
+        id="searchcountpopup1"
+        class="demo-popup"
+        auto-dismiss="none"
+        modality="modal"
+        position.my.horizontal="center"
+        position.my.vertical="center"
+        position.at.horizontal="center"
+        position.at.vertical="center"
+        position.of="window"
+        tail="none">
+        <div class="demo-popup-body">
+
+            <div class="demo-popup-content oj-sm-padding-2x" style="min-width: 50vH;">
+                <oj-text-area label-hint="info" readonly="true" value="[[suchergebnis]]"></oj-text-area>
+            </div>
+            <div class="demo-popup-header">
+                <oj-button
+                    id="btnCancel"
+                    display="icons"
+                    on-oj-action="[[cancelCountListener]]">
+                    <oj-bind-text>Zurück</oj-bind-text>
+                </oj-button>
+                <oj-button
+                    id="btnShow"
+                    display="icons"
+                    on-oj-action="[[continueCountListener]]">
+                    <oj-bind-text>Details einsehen</oj-bind-text>
+                </oj-button>
+            </div>
+        </div>
+    </oj-popup>
+</div>

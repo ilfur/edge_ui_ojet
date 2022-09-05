@@ -1,0 +1,46 @@
+<!--
+ Copyright (c) 2014, 2021, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+<div class="oj-hybrid-padding">
+  <h4 class="oj-header-border">Partner Informationen</h4>
+
+          
+              <div class="oj-panel oj-flex">
+                <oj-bind-for-each data="[[datasource]]">
+                  <template data-oj-as="partners">
+                    <div :class="oj-panel oj-panel-shadow-sm oj-flex-item oj-typography-bold">
+                      <oj-bind-text value="[[partners.data.partnerName]]"></oj-bind-text><br/>
+                      Status: <oj-bind-text value="[[partners.data.status]]"></oj-bind-text><br/>
+                      Datensätze: <oj-bind-text value="[[partners.data.numTotal]]"></oj-bind-text><br/>
+                    </div>
+                  </template>
+                </oj-bind-for-each>
+              </div>
+          
+                
+              <div class="oj-flex oj-panel oj-typography-bold oj-sm-justify-content-center">
+                  <h6> Gesamt: <oj-bind-text value="[[numTotalKo]]"></oj-bind-text> </h6>
+                  <oj-chart style="height: 15rem;"
+                     id="pieChart"
+                     type="pie"
+                     data="[[datasource]]"
+                     
+                     animation-on-display="auto"
+                     animation-on-data-change="auto"
+                     style-defaults.three-d-effect="on"
+                     
+                     style-defaults.data-label-position="auto">
+                     <template slot="itemTemplate" data-oj-as="partners">
+                       <oj-chart-item
+                         value="[[partners.data.numTotal]]"
+                         group-id="[[ [partners.data.status] ]]"
+                         series-id="[[partners.data.partnerName]]"></oj-chart-item>
+                     </template>
+                   </oj-chart>
+              </div>
+               
+</div>
+              
+               
