@@ -32,6 +32,7 @@ define(['knockout', 'keycloak', 'ojs/ojcontext', 'ojs/ojmodule-element-utils', '
 
       let navData = [
         { path: '', redirect: 'ueber' },
+        { path: 'darstellung', detail: { label: 'Forschungsdaten darstellen', iconClass: 'oj-ux-ico-information-s' } },
         { path: 'ueber', detail: { label: 'Über', iconClass: 'oj-ux-ico-information-s' } },
         { path: 'infos', detail: { label: 'Infos', iconClass: 'oj-ux-ico-bar-chart' } },
         { path: 'registrierung', detail: { label: 'Forschungsdaten freigeben', iconClass: 'oj-ux-ico-fire' } },
@@ -39,18 +40,18 @@ define(['knockout', 'keycloak', 'ojs/ojcontext', 'ojs/ojmodule-element-utils', '
         { path: 'admin', detail: { label: 'Admin', iconClass: 'oj-ux-ico-build' } }
       ];
       // Router setup
-      let router = new CoreRouter(navData, {
+      this.router = new CoreRouter(navData, {
         urlAdapter: new UrlParamAdapter()
       });
-      router.sync();
+      this.router.sync();
 
-      this.moduleAdapter = new ModuleRouterAdapter(router);
+      this.moduleAdapter = new ModuleRouterAdapter(this.router);
 
-      this.selection = new KnockoutRouterAdapter(router);
+      this.selection = new KnockoutRouterAdapter(this.router);
 
       // Setup the navDataProvider with the routes, excluding the first redirected
       // route.
-      this.navDataProvider = new ArrayDataProvider(navData.slice(1), {keyAttributes: "path"});
+      this.navDataProvider = new ArrayDataProvider(navData.slice(2), {keyAttributes: "path"});
 
       // Header
       // Application Name used in Branding Area
@@ -58,6 +59,7 @@ define(['knockout', 'keycloak', 'ojs/ojcontext', 'ojs/ojmodule-element-utils', '
       // User Info used in Global Navigation area
       this.userLogin = ko.observable("anonymous");
       this.statusTxt = ko.observable("");
+      this.foundData = ko.observableArray("");
 
 
 	     this.keycloak = Keycloak();

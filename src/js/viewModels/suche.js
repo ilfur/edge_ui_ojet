@@ -9,9 +9,10 @@
  * Your customer ViewModel code goes here
  */
 define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytreedataprovider", 'ojs/ojcollectiondataprovider', "ojs/ojknockout-model", "ojs/ojkeyset", "comorbLookup",
-    "searchFactory", "ojs/ojarraydataprovider", "ojs/ojlistdataproviderview", "ojs/ojselectcombobox", "ojs/ojselectsingle", "ojs/ojknockout", "ojs/ojlistview", "ojs/ojradioset",
+    "searchFactory", "ojs/ojarraydataprovider", "ojs/ojlistdataproviderview", 'ojs/ojcorerouter', "ojs/ojselectcombobox", "ojs/ojselectsingle", "ojs/ojknockout", "ojs/ojlistview", "ojs/ojradioset",
     "ojs/ojformlayout", "ojs/ojslider", "ojs/ojbutton", "ojs/ojaccordion", "ojs/ojdatetimepicker", "ojs/ojlabel", "ojs/ojpopup"],
-        function (accUtils, ko, exports, ojbootstrap_1, ArrayTreeDataProvider, CollectionDataProvider, KnockoutUtils, ojkeyset_1, ComorbLookup, searchFactory, ArrayDataProvider, ListDataProviderView) {
+        function (accUtils, ko, exports, ojbootstrap_1, ArrayTreeDataProvider, CollectionDataProvider, KnockoutUtils, ojkeyset_1, ComorbLookup, 
+                  searchFactory, ArrayDataProvider, ListDataProviderView, CoreRouter) {
             function CustomerViewModel() {
                 // Below are a set of the ViewModel methods invoked by the oj-module component.
                 // Please reference the oj-module jsDoc for additional information.
@@ -24,9 +25,9 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
                  * and inserted into the DOM and after the View is reconnected
                  * after being disconnected.
                  */
-                
+
                 var self = this;
-                
+
                 this.connected = () => {
                     accUtils.announce('Such - Seite geladen.');
                     document.title = "Suche";
@@ -58,6 +59,8 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
                 this.kisIdentifier = ko.observable("");
                 this.gender = ko.observable("");
                 this.smokingStatus = ko.observable("");
+                this.dateOfFirstSymptoms = ko.observable("");
+                this.dateOfFirstSymptomsComp = ko.observable("$gt");
                 this.preName = ko.observable("");
                 this.sureName = ko.observable("");
                 this.birthName = ko.observable("");
@@ -67,10 +70,11 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
                 this.medDatasource = ko.observable();
 
 
-                this.morbs = ko.observableArray();
+                this.morbs = ko.observableArray([]);
                 this.morbsProvider = new ArrayDataProvider(this.morbs, {
                     keyAttributes: 'id'
                 });
+                this.morbsAnd = ko.observable("$or");
 
                 this.comorbData = ComorbLookup;
                 this.comorbsource = new ArrayDataProvider(this.comorbData, {keyAttributes: 'komid'});
@@ -116,12 +120,14 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
                 this.resetButtonClicked = function (event, data) {
                     data.kisIdentifier("");
                     data.gender("");
+                    data.dateOfFirstSymptoms("");
                     data.smokingStatus("");
                     data.preName("");
                     data.sureName("");
                     data.birthName("");
                     data.birthDate("");
                     data.birthPlace("");
+                    data.morbs([]);
                 }
 
                 this.searchButtonClicked = function (event, data) {
@@ -213,8 +219,38 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
                         enteredBasisData = true;
                     }
 
+                    if (!data.dateOfFirstSymptoms() == "") {
+                        //data.search.basisData.gender = data.gender();
+                        if (enteredSomething) {
+                            qbeString = qbeString + ','; //end of identifyingData section
+                        }
+                        if (!enteredBasisData) {
+                            qbeString = qbeString + '"basisData": {';
+                        }
+                        qbeString = qbeString + '"dateOfFirstSymptoms" : {"$date": {"' + data.dateOfFirstSymptomsComp()+ '" : "' + data.dateOfFirstSymptoms() + '"}}}';
+                        enteredSomething = true;
+                        enteredBasisData = true;
+                    }
+
                     if (enteredBasisData) {
                         qbeString = qbeString + '}'; //end of basisData section
+                    }
+                    
+                    if (!data.morbs().length == 0) {
+                        //data.search.basisData.gender = data.gender();
+                        if (enteredSomething) {
+                            qbeString = qbeString + ', '; 
+                        }
+                        qbeString = qbeString + '"' + data.morbsAnd() + '" : [';
+                        data.morbs().forEach(function (element, index, arr) {
+                            qbeString = qbeString + '{"comorbidity.comId" : '+element+'}';
+                            if (arr.length-1 > index) {
+                                qbeString = qbeString + ' , ';
+                            }
+                        });
+                        qbeString = qbeString + ']';
+                        
+                        enteredSomething = true;
                     }
 
                     qbeString = qbeString + '}'; //close JSON document
@@ -223,7 +259,7 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
                         let popup = document.getElementById("searchpopup1");
                         popup.open("#btnSearch");
                     }
-                    
+
 
                     console.log(qbeString);
                     if (enteredSomething) {
@@ -232,10 +268,18 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
                         //console.log(this.qbeCount);
                         let popup = document.getElementById("searchcountpopup1");
                         popup.open("#btnSearch");
-                        self.suchergebnis("Führe Query aus & zähle Ergebnisse");
-                        
+                        self.suchergebnis("Führe Query aus & zähle Ergebnisse\n");
+
+                        self.localCountUrl = "https://edge-appconf.edge1.130.162.210.16.nip.io/edge/psaq/patient/qbe/count";
+                        self.distCountUrl = "https://core-appconf.core.130.162.210.16.nip.io/core/radiq/patient/distqbe/count";
+                        if (self.suchtyp() == "lokal") {
+                            self.countUrl = self.localCountUrl;
+                        } else {
+                            self.countUrl = self.distCountUrl;
+                        }
+
                         $.ajax({
-                            url: "https://edge-appconf.edge1.130.162.210.16.nip.io/edge/psaq/patient/qbe/count",
+                            url: self.countUrl,
                             type: "PUT",
                             data: qbeString,
                             contentType: "application/json",
@@ -250,7 +294,14 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
                             success: function (result) {
                                 console.log(result);
                                 tmp = self.suchergebnis();
-                                self.suchergebnis(tmp + "\nDatensätze gefunden: " + result.numFound);
+                                if (self.suchtyp() == "lokal") {
+                                    self.suchergebnis(tmp + "\nDatensätze gefunden: " + result.numFound);
+                                } else {
+                                    result.partners.forEach(function (element) {
+                                        self.suchergebnis(self.suchergebnis() + "\nPartner: " + element.partner.partnerName + " - " + element.partner.status + " - " + element.partner.duration_ms + "ms");
+                                    })
+                                    self.suchergebnis(self.suchergebnis() + "\nDatensätze gefunden: " + result.results);
+                                }
                             }
                         });
                     }
@@ -261,13 +312,50 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
                     let popup = document.getElementById("searchpopup1");
                     popup.close();
                 }
+
                 this.cancelCountListener = function () {
                     let popup = document.getElementById("searchcountpopup1");
                     popup.close();
                 }
+
                 this.continueCountListener = function () {
-                    let popup = document.getElementById("searchcountpopup1");
-                    popup.close();
+                    self.localqbeUrl = "https://edge-appconf.edge1.130.162.210.16.nip.io/edge/psaq/patient/qbe";
+                    self.distqbeUrl = "https://core-appconf.core.130.162.210.16.nip.io/core/radiq/patient/distqbe";
+                    if (self.suchtyp() == "lokal") {
+                        self.countUrl = self.localqbeUrl;
+                    } else {
+                        self.countUrl = self.distqbeUrl;
+                    }
+                    
+                    self.suchergebnis("Lade gefundene Daten herunter");
+                    
+                    $.ajax({
+                        url: self.countUrl,
+                        type: "PUT",
+                        data: qbeString,
+                        contentType: "application/json",
+                        //crossDomain: true,
+                        async: false,
+                        cache: false,
+                        //dataType: "jsonp", 
+                        //headers: {
+                        //    accept: "application/json",
+                        //    "Access-Control-Allow-Origin": "*"
+                        //},
+                        success: function (result) {
+                            
+                            console.log(result);
+                            var rootViewModel = ko.dataFor(document.getElementById('globalBody'));
+                            if (self.suchtyp() == "lokal") {
+                                rootViewModel.foundData(result);
+                            } else {
+                                rootViewModel.foundData(result.results);
+                            }
+                            let popup = document.getElementById("searchcountpopup1");
+                            popup.close();
+                            rootViewModel.router.go({path: 'darstellung'});
+                        }
+                    });
                 }
 
                 //document.getElementById("searchpanel").style.color = searchcol();

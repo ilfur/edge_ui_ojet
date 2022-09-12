@@ -1,0 +1,45 @@
+<!--
+ Copyright (c) 2014, 2021, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+-->
+<div class="oj-hybrid-padding">
+    <h1>Forschungsdaten darstellen</h1>
+    <div>
+        <oj-bind-for-each data="[[dataProvider]]">
+            <template data-oj-as="data">
+            <ul>
+              <li>
+                <span class="oj-treeview-item-content-icon"></span>
+                <span class="oj-treeview-item-text">
+                    <oj-bind-text value="Patient"></oj-bind-text>
+                </span>
+                <ul>
+                    <li><span class="oj-treeview-item-content-icon"></span><span class="oj-treeview-item-text">Basisdaten</span><br/>
+                        
+                            <span class="oj-treeview-item-text">Erste Symptome: <oj-bind-text value='[[ data.basisData.dateOfFirstSymptoms ]]'></oj-bind-text></span><br/>
+                            <span class="oj-treeview-item-text">Geschlecht: <oj-bind-if test="[[ data.basisData.gender == 1 ]]">weiblich</oj-bind-if>
+                                                                            <oj-bind-if test="[[ data.basisData.gender == 2 ]]">männlich</oj-bind-if>
+                                                                            <oj-bind-if test="[[ data.basisData.gender == 3 ]]">divers</oj-bind-if></span><br/>
+                            <span class="oj-treeview-item-text">Staatsangehörigkeit<oj-bind-text value='[[ data.basisData.ethnicity ]]'></oj-bind-text><oj-bind-if test="[[ data.basisData.ethnicity == 1 ]]"> - deutsch</oj-bind-if></span><br/>
+                            
+                    </li>
+                    <li><span class="oj-treeview-item-content-icon"></span><span class="oj-treeview-item-text">Identifizierende Daten</span><br/>
+                            <span class="oj-treeview-item-text">PatNr: <oj-bind-text value='[[ data.identifyingData.kisIdentifier ]]'></oj-bind-text></span><br/>
+                            <span class="oj-treeview-item-text">Geburtstag: <oj-bind-text value='[[ data.identifyingData.dateOfBirth ]]'></oj-bind-text></span><br/>
+                            <span class="oj-treeview-item-text">Nachname, Vorname: <oj-bind-text value='[[ data.identifyingData.name ]]'></oj-bind-text>, <oj-bind-text value='[[ data.identifyingData.preName ]]'></oj-bind-text></span><br/>
+                            <span class="oj-treeview-item-text">Geburtsname: <oj-bind-text value='[[ data.identifyingData.maidenName ]]'></oj-bind-text></span><br/>
+                            <span class="oj-treeview-item-text">Geburtsort: <oj-bind-text value='[[ data.identifyingData.birthPlace ]]'></oj-bind-text></span><br/>
+                    </li>
+                    <li><span class="oj-treeview-item-content-icon"></span><span class="oj-treeview-item-text">Komorbiditäten</span></li>
+                    <li><span class="oj-treeview-item-content-icon"></span><span class="oj-treeview-item-text">Labordaten</span></li>
+                    <li><span class="oj-treeview-item-content-icon"></span><span class="oj-treeview-item-text">Historie</span></li>
+                    <li><span class="oj-treeview-item-content-icon"></span><span class="oj-treeview-item-text">Patient-Modul</span></li>
+                    <li><span class="oj-treeview-item-content-icon"></span><span class="oj-treeview-item-text">Medikation</span></li>
+                </ul>
+              </li>
+            </ul>
+            </template>
+        </oj-bind-for-each>
+    </div>
+</div>

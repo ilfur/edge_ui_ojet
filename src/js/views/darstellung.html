@@ -1,0 +1,64 @@
+<!--
+ Copyright (c) 2014, 2021, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+-->
+<div class="oj-hybrid-padding">
+    <h4 class="oj-header-border">Forschungsdaten darstellen</h4>
+    <div class="oj-flex">
+        <oj-form-layout class="oj-flex-item">
+              
+            <oj-bind-for-each data="[[ dataProvider ]]">
+            <template>
+            <div class="oj-panel oj-flex oj-flex-item oj-panel-shadow-sm" >
+
+                <span class="oj-treeview-item-content-icon"></span>
+                <span class="oj-treeview-item-text">
+                    <oj-bind-text value="Patient"></oj-bind-text>
+                </span>
+                <div class="oj-panel oj-flex oj-flex-item oj-sm-flex-direction-column" >
+                    <div class="oj-panel oj-flex oj-flex-item oj-sm-align-items-center" >
+                        <oj-bind-text class="oj-flex-item" value="Basisdaten"></oj-bind-text>
+                        <oj-collapsible class="oj-flex oj-flex-item oj-sm-padding-4x-start ">
+                            <div class="oj-flex-item oj-flex"><oj-bind-text class="oj-flex-item">Erste Symptome: </oj-bind-text><oj-bind-text  value='[[ $current.data.basisData.dateOfFirstSymptoms ]]'></oj-bind-text></div>
+                            <div class="oj-flex-item oj-flex"><oj-bind-text class="oj-flex-item">Geschlecht: </oj-bind-text><oj-bind-if test="[[ $current.data.basisData.gender == 1 ]]">weiblich</oj-bind-if>
+                                <oj-bind-if test="[[ $current.data.basisData.gender == 2 ]]">männlich</oj-bind-if>
+                                <oj-bind-if test="[[ $current.data.basisData.gender == 3 ]]">divers</oj-bind-if></div>
+                            <div class="oj-flex-item oj-flex"><oj-bind-text class="oj-flex-item">Staatsangehörigkeit: <oj-bind-text><oj-bind-text class="oj-sm-padding-4x-start" value='[[ $current.data.basisData.ethnicity ]]'></oj-bind-text><oj-bind-if test="[[ $current.data.basisData.ethnicity == 1 ]]"> - deutsch</oj-bind-if></div>
+                        </oj-collapsible>    
+                    </div>
+                    <div class="oj-panel oj-flex oj-flex-item oj-sm-align-items-center" >
+                        <oj-bind-text class="oj-flex-item" value="Identifizierende Daten"></oj-bind-text>
+                        <oj-collapsible class="oj-flex oj-flex-item oj-sm-padding-4x-start">
+                            <div class="oj-flex-item oj-flex"><oj-bind-text class="oj-flex-item">PatNr: </oj-bind-text><oj-bind-text  value='[[ $current.data.identifyingData.kisIdentifier ]]'></oj-bind-text></div>
+                            <div class="oj-flex-item oj-flex"><oj-bind-text class="oj-flex-item">Geburtstag: </oj-bind-text><oj-bind-text  value='[[ $current.data.identifyingData.dateOfBirth ]]'></oj-bind-text></div>
+                            <div class="oj-flex-item oj-flex"><oj-bind-text class="oj-flex-item">Nachname, Vorname: </oj-bind-text><oj-bind-text  value='[[ $current.data.identifyingData.name ]]'></oj-bind-text>, <oj-bind-text value='[[ $current.data.identifyingData.preName ]]'></oj-bind-text></div>
+                            <div class="oj-flex-item oj-flex"><oj-bind-text class="oj-flex-item">Geburtsname: </oj-bind-text><oj-bind-text  value='[[ $current.data.identifyingData.maidenName ]]'></oj-bind-text></div>
+                            <div class="oj-flex-item oj-flex"><oj-bind-text class="oj-flex-item">Geburtsort: </oj-bind-text><oj-bind-text  value='[[ $current.data.identifyingData.birthPlace ]]'></oj-bind-text></div>
+                        </oj-collapsible>
+                    </div>
+                    <div class="oj-panel oj-flex oj-flex-item" >
+                        <span class="oj-treeview-item-content-icon"></span><span class="oj-treeview-item-text">Komorbiditäten</span>
+                    </div>
+                    <div class="oj-panel oj-flex oj-flex-item" >
+                        <span class="oj-treeview-item-content-icon"></span><span class="oj-treeview-item-text">Labordaten</span>
+                    </div>
+                    <div class="oj-panel oj-flex oj-flex-item" >
+                        <span class="oj-treeview-item-content-icon"></span><span class="oj-treeview-item-text">Historie</span>
+                    </div>
+                    <div class="oj-panel oj-flex oj-flex-item" >
+                        <span class="oj-treeview-item-content-icon"></span><span class="oj-treeview-item-text">Patient-Modul</span>
+                    </div>
+                    <div class="oj-panel oj-flex oj-flex-item" >
+                        <span class="oj-treeview-item-content-icon"></span><span class="oj-treeview-item-text">Medikation</span>
+                    </div>
+                </div>
+            </div>
+            </template>
+            <template slot='noData'>
+               <span>Keine Daten</span>
+            </template>
+            </oj-bind-for-each>
+        </oj-form-layout>
+        </div>
+    </div>

@@ -12,7 +12,7 @@
                              id="suchtypRadioset"
                              label-hint="Radioset No Visual Label"
                              label-edge="none"
-                             value="[[suchtyp]]">
+                             value="{{suchtyp}}">
                     <oj-option value="lokal">Lokale Suche</oj-option>
                     <oj-option value="verteilt">Verteilte Suche</oj-option>
                 </oj-radioset>
@@ -120,12 +120,12 @@
                             <oj-label class="oj-flex-item">Erste Symptome</oj-label>
                             <div class="oj-flex-item oj-flex  oj-sm-flex-items-1 oj-sm-align-items-center">
 
-                                <oj-radioset class="oj-flex-item" value="" labelled-by="mainlabelid">
-                                    <oj-option id="vor" value="lt">vor</oj-option>
-                                    <oj-option id="nach" value="gt">nach</oj-option>
+                                <oj-radioset class="oj-flex-item" value="{{ dateOfFirstSymptomsComp }}">
+                                    <oj-option id="vor" value="$lt">vor</oj-option>
+                                    <oj-option id="nach" value="$gt">nach</oj-option>
                                 </oj-radioset>
 
-                                <oj-input-date class="oj-flex-item" label-hint="Datum" autocomplete="off"></oj-input-date>
+                                <oj-input-date class="oj-flex-item" label-hint="Datum" value="{{ dateOfFirstSymptoms }}" autocomplete="off"></oj-input-date>
 
                             </div>
                         </oj-form-layout>
@@ -156,7 +156,10 @@
                             options="{{ morbsListProvider }}"
                             class="oj-form-control-max-width-md">
                         </oj-combobox-many>
-                        <oj-bind-text value="[[JSON.stringify(morbs())]]"></oj-bind-text>
+                        <oj-radioset class="oj-flex-item" value="{{morbsAnd}}" labelled-by="mainlabelid">
+                                <oj-option  value="$and">UND</oj-option>
+                                <oj-option  value="$or">ODER</oj-option>
+                            </oj-radioset>
 
                     </div>
                 </oj-collapsible>
@@ -223,8 +226,8 @@
         tail="none">
         <div class="demo-popup-body">
 
-            <div class="demo-popup-content oj-sm-padding-2x" style="min-width: 50vH;">
-                <oj-text-area label-hint="info" readonly="true" value="[[suchergebnis]]"></oj-text-area>
+            <div class="demo-popup-content oj-sm-padding-2x" style="min-width: 60vH;">
+                <oj-text-area label-hint="info" readonly="true" value="[[suchergebnis]]" rows="7"></oj-text-area>
             </div>
             <div class="demo-popup-header">
                 <oj-button
