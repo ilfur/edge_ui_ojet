@@ -44,38 +44,14 @@ define(['../accUtils', 'ojs/ojcorerouter', 'knockout', 'ojs/ojbootstrap', "ojs/o
                     // Implement if needed
                 };
 
-                this.rootViewModel = ko.dataFor(document.getElementById('globalBody'));
+                var rootViewModel = ko.dataFor(document.getElementById('globalBody'));
                 //this.foundData = rootViewModel.foundData;
                 //console.log(this.foundData());
 
-                
-                
-                this.currentArrayPosition = ko.observable(0);
-                this.currentPatient = ko.observable(this.rootViewModel.foundData()[this.currentArrayPosition()]);
-                this.currentMorbs = ko.observableArray(this.currentPatient().comorbidity);
-                this.currentTreatment = ko.observableArray(this.currentPatient().treatment);
-                                
-                this.forward = function (event, data) {
-                    data.currentArrayPosition(data.currentArrayPosition()+1);
-                    if (data.currentArrayPosition() == data.rootViewModel.foundData().length) {
-                        data.currentArrayPosition(0);
-                    }
-                    data.currentPatient(data.rootViewModel.foundData()[data.currentArrayPosition()]);
-                    data.currentMorbs(data.currentPatient().comorbidity);
-                    data.currentTreatment(data.currentPatient().treatment);
-                }
-                
-                this.backward = function (event, data) {
-                    data.currentArrayPosition(data.currentArrayPosition()-1);
-                    if (data.currentArrayPosition() < 0 ) {
-                        data.currentArrayPosition(data.rootViewModel.foundData().length-1);
-                    }
-                    data.currentPatient(data.rootViewModel.foundData()[data.currentArrayPosition()]);
-                    data.currentMorbs(data.currentPatient().comorbidity);
-                    data.currentTreatment(data.currentPatient().treatment);
-                }
-                
-                
+                this.dataProvider = new ArrayDataProvider(rootViewModel.foundData(), {
+                    keyAttributes: "initialTxnId",
+                });
+
                 //this.KnockoutTemplateUtils = KnockoutTemplateUtils;
 
             }

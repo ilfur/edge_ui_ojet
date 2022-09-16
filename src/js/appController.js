@@ -59,7 +59,7 @@ define(['knockout', 'keycloak', 'ojs/ojcontext', 'ojs/ojmodule-element-utils', '
       // User Info used in Global Navigation area
       this.userLogin = ko.observable("anonymous");
       this.statusTxt = ko.observable("");
-      this.foundData = ko.observableArray("");
+      this.foundData = ko.observableArray([]);
 
 
 	     this.keycloak = Keycloak();
