@@ -1,7 +1,7 @@
 define(['ojs/ojcore'], function (oj) {
     var SearchFactory = {
-        resourceUrl : 'https://edge-appconf.edge1.130.162.210.16.nip.io/edge/fpa/lookup', 
-        qbeUrl : 'https://edge-appconf.edge1.130.162.210.16.nip.io/edge/psaq/patient/qbe',
+        resourceUrl : '/edge/fpa/lookup', 
+        qbeUrl : '/edge/psaq/patient/qbe/search',
         createMedModel : function () {
             var med = oj.Model.extend( {
                 urlRoot : this.resourceUrl+"/medications", 

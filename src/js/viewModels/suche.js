@@ -270,8 +270,8 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
                         popup.open("#btnSearch");
                         self.suchergebnis("Führe Query aus & zähle Ergebnisse\n");
 
-                        self.localCountUrl = "https://edge-appconf.edge1.130.162.210.16.nip.io/edge/psaq/patient/qbe/count";
-                        self.distCountUrl = "https://core-appconf.core.130.162.210.16.nip.io/core/radiq/patient/distqbe/count";
+                        self.localCountUrl = "/edge/psaq/patient/qbe/count";
+                        self.distCountUrl = "/core/radiq/patients/distqbe/count";
                         if (self.suchtyp() == "lokal") {
                             self.countUrl = self.localCountUrl;
                         } else {
@@ -280,7 +280,7 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
 
                         $.ajax({
                             url: self.countUrl,
-                            type: "PUT",
+                            type: "POST",
                             data: qbeString,
                             contentType: "application/json",
                             //crossDomain: true,
@@ -294,13 +294,15 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
                             success: function (result) {
                                 console.log(result);
                                 tmp = self.suchergebnis();
+				rows = ko.observable(0);
                                 if (self.suchtyp() == "lokal") {
                                     self.suchergebnis(tmp + "\nDatensätze gefunden: " + result.numFound);
                                 } else {
-                                    result.partners.forEach(function (element) {
-                                        self.suchergebnis(self.suchergebnis() + "\nPartner: " + element.partner.partnerName + " - " + element.partner.status + " - " + element.partner.duration_ms + "ms");
+                                    result.forEach(function (element) {
+                                        self.suchergebnis(self.suchergebnis() + "\nPartner: " + element.partnerName + " - " + element.status );
+					rows(rows() + element.numTotal);
                                     })
-                                    self.suchergebnis(self.suchergebnis() + "\nDatensätze gefunden: " + result.results);
+                                    self.suchergebnis(self.suchergebnis() + "\nDatensätze gefunden: " + rows());
                                 }
                             }
                         });
@@ -319,8 +321,8 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
                 }
 
                 this.continueCountListener = function () {
-                    self.localqbeUrl = "https://edge-appconf.edge1.130.162.210.16.nip.io/edge/psaq/patient/qbe";
-                    self.distqbeUrl = "https://core-appconf.core.130.162.210.16.nip.io/core/radiq/patient/distqbe";
+                    self.localqbeUrl = "/edge/psaq/patient/qbe/search";
+                    self.distqbeUrl = "/core/radiq/patients/distqbe/search";
                     if (self.suchtyp() == "lokal") {
                         self.countUrl = self.localqbeUrl;
                     } else {
@@ -331,7 +333,7 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
                     
                     $.ajax({
                         url: self.countUrl,
-                        type: "PUT",
+                        type: "POST",
                         data: qbeString,
                         contentType: "application/json",
                         //crossDomain: true,

@@ -7,13 +7,17 @@
     <h4 class="oj-header-border">Forschungsdaten darstellen - Patient <oj-bind-text value="[[ currentArrayPosition()+1 ]]"></oj-bind-text><oj-bind-text value="/"></oj-bind-text><oj-bind-text value="[[ rootViewModel.foundData().length ]]"></oj-bind-text></h4>
     <div class="oj-flex">
         <oj-form-layout class="oj-flex-item oj-formlayout-full-width">
-            <div class="oj-panel oj-flex-item oj-flex  oj-sm-align-items-center oj-panel-shadow-sm " style="min-height: 10vH;">
-                <oj-button  class="oj-flex-item"  on-oj-action="[[backward]]">
-                    <span><oj-bind-text value="<<<"> </oj-bind-text></span>
+            <div class="oj-panel oj-flex-item oj-flex  oj-sm-align-items-center oj-panel-shadow-sm " >
+                <oj-button  class="oj-flex-item oj-typography-subheading-md"  on-oj-action="[[backward]]" >
+                    <span role="img" class="oj-ux-ico-rewind" title="Voriger Patient" alt="Voriger Patient" ></span>
                 </oj-button>
-                <oj-button  class="oj-flex-item"  on-oj-action="[[forward]]">
-                    <span><oj-bind-text value=">>>"> </oj-bind-text></span>
+                <oj-button  class="oj-flex-item oj-typography-subheading-md"  on-oj-action="[[forward]]" >
+                    <span role="img" class="oj-ux-ico-fast-forward" title="Nächster Patient" alt="Nächster Patient"></span>
                 </oj-button>
+                <oj-button  class="oj-flex-item oj-typography-subheading-md" >
+                    <span role="img" class="oj-ux-ico-clock-history" title="Patienten-Verlauf" alt="Patienten-Verlauf"></span>
+                </oj-button>
+                 
             </div>
 
             <div class="oj-panel oj-flex oj-flex-item oj-panel-shadow-sm" >
@@ -41,19 +45,19 @@
                             <div class="oj-flex-item oj-flex"><oj-bind-text class="oj-flex-item">Geschlecht: </oj-bind-text><oj-bind-if test="[[ currentPatient().basisData.gender == 1 ]]">weiblich</oj-bind-if>
                                 <oj-bind-if test="[[ currentPatient().basisData.gender == 2 ]]">männlich</oj-bind-if>
                                 <oj-bind-if test="[[ currentPatient().basisData.gender == 3 ]]">divers</oj-bind-if></div>
-                            <div class="oj-flex-item oj-flex"><oj-bind-text class="oj-flex-item">Staatsangehörigkeit: <oj-bind-text><oj-bind-text class="oj-sm-padding-4x-start" value='[[ currentPatient().basisData.ethnicity ]]'></oj-bind-text><oj-bind-if test="[[ currentPatient().basisData.ethnicity == 1 ]]"> - deutsch</oj-bind-if></div>
+                            <div class="oj-flex-item oj-flex"><oj-bind-text class="oj-flex-item">Staatsangehörigkeit: <oj-bind-text class="oj-sm-padding-4x-start" value='[[ currentPatient().basisData.ethnicity ]]'></oj-bind-text><oj-bind-if test="[[ currentPatient().basisData.ethnicity == 1 ]]"> - deutsch</oj-bind-if></div>
                     </div>
                     </oj-collapsible>
                     <oj-collapsible>
                     <h3 slot="header">
                         Komorbiditäten
                     </h3>
-                    <div>
+                    <div class="oj-flex-item oj-flex" style="min-width: 12rem;">
                             <oj-bind-for-each data="[[ currentMorbs ]]">
                               <template>
                                   <div class="oj-flex-item oj-flex oj-panel">
                                   <div class="oj-flex-item "><oj-bind-text value="[[ $current.data.comName ]]"></oj-bind-text></div>
-                                  <div class="oj-flex-item "><oj-bind-text value="[[ $current.data.comSince ]]"></oj-bind-text></div>
+                                  <div class="oj-flex-item "><oj-bind-if test=" !( $current.data.comSince == null )"><oj-bind-text value=" seit "></oj-bind-text><oj-bind-text value="[[ $current.data.comSince ]]"></oj-bind-text></oj-bind-if></div>
                                   </div>
                               </template>
                             </oj-bind-for-each>
@@ -64,7 +68,7 @@
                         Medikation
                     </h3>
                     <div>
-                                  <div class="oj-flex-item oj-flex oj-panel">
+                                  <div class="oj-flex-item oj-flex oj-panel oj-bg-neutral-10">
                                       <div class="oj-flex-item oj-sm-2"><oj-bind-text  value="Präparat"></oj-bind-text></div>
                                       <div class="oj-flex-item oj-sm-2"><oj-bind-text  value="Dosis"></oj-bind-text></div>
                                       <div class="oj-flex-item oj-sm-2"><oj-bind-text  value="seit"></oj-bind-text></div>

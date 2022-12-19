@@ -8,7 +8,7 @@
 /*
  * Your dashboard ViewModel code goes here
  */
-define(['../accUtils', "ojs/ojcore", "require", "knockout", 'jquery', 'infosfactory', 'ojs/ojcollectiondataprovider', 'ojs/ojknockout', "ojs/ojchart"],
+define(['../accUtils', "ojs/ojcore", "require", "knockout", 'jquery', 'infosFactory', 'ojs/ojcollectiondataprovider', 'ojs/ojknockout', "ojs/ojchart"],
  function(accUtils, oj, require, ko, $, infosFactory, CollectionDataProvider) {
     function DashboardViewModel() {
       // Below are a set of the ViewModel methods invoked by the oj-module component.

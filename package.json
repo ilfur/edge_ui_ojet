@@ -8,9 +8,13 @@
   },
   "devDependencies": {
     "@oracle/oraclejet-tooling": "~11.1.0",
+    "css-loader": "6.0.0",
     "fs-extra": "^8.1.0",
     "glob": "^7.1.1",
-    "underscore": "^1.10.2"
+    "style-loader": "3.1.0",
+    "text-loader": "0.0.1",
+    "underscore": "^1.10.2",
+    "webpack": "5.44.0"
   },
   "engines": {
     "node": ">=12.21.0"

@@ -1,6 +1,6 @@
 define(['ojs/ojcore'], function (oj) {
     var InfosFactory = {
-        resourceUrl : 'https://core-appconf.core.130.162.210.16.nip.io/core/radiq/patient/dist/count', 
+        resourceUrl : '/core/radiq/patients/dist/count', 
         // Single Partner Model
         createPartnerModel : function () {
             var partner = oj.Model.extend( {
