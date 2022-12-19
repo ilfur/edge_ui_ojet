@@ -57,6 +57,7 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
                 this.suchergebnis = ko.observable("");
 
                 this.kisIdentifier = ko.observable("");
+                this.pseudonymId = ko.observable("");
                 this.gender = ko.observable("");
                 this.smokingStatus = ko.observable("");
                 this.dateOfFirstSymptoms = ko.observable("");
@@ -119,6 +120,7 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
 
                 this.resetButtonClicked = function (event, data) {
                     data.kisIdentifier("");
+                    data.pseudonymId("");
                     data.gender("");
                     data.dateOfFirstSymptoms("");
                     data.smokingStatus("");
@@ -140,6 +142,18 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
                         qbeString = qbeString + '"identifyingData": {"kisIdentifier": ' + data.kisIdentifier();
                         enteredSomething = true;
                     }
+
+	            if (!data.pseudonymId() == "") {
+                        //data.search.identifyingData.preName = data.preName();
+                        if (!enteredSomething) {
+                            qbeString = qbeString + '"identifyingData": {';
+                        } else {
+                            qbeString = qbeString + ',';
+                        }
+                        qbeString = qbeString + '"pseudonymId": "' + data.pseudonymId() + '"'
+                        enteredSomething = true;
+                    }
+
                     if (!data.preName() == "") {
                         //data.search.identifyingData.preName = data.preName();
                         if (!enteredSomething) {
