@@ -46,12 +46,10 @@ define(['../accUtils', 'ojs/ojcorerouter', 'knockout', 'ojs/ojbootstrap', "ojs/o
                 this.rootViewModel = ko.dataFor(document.getElementById('globalBody'));
 
                 this.currentArrayPosition = ko.observable(0);
-                this.currentPatient = ko.observable(this.rootViewModel.foundData()[this.currentArrayPosition()]);
+                this.currentPatient = ko.observable(this.rootViewModel.foundHist()[this.currentArrayPosition()]);
 		this.suchtyp = ko.observable(this.rootViewModel.searchType());
                 this.currentMorbs = ko.observableArray(this.currentPatient().comorbidity);
                 this.currentTreatment = ko.observableArray(this.currentPatient().treatment);
-	        this.suchergebnis = ko.observable("");
-
 
 		this.comorbCollection = ko.observableArray([]);
 
@@ -74,11 +72,11 @@ define(['../accUtils', 'ojs/ojcorerouter', 'knockout', 'ojs/ojbootstrap', "ojs/o
                                 
                 this.forward = function (event, data) {
                     data.currentArrayPosition(data.currentArrayPosition()+1);
-                    if (data.currentArrayPosition() == data.rootViewModel.foundData().length) {
+                    if (data.currentArrayPosition() == data.rootViewModel.foundHist().length) {
                         data.currentArrayPosition(0);
                     }
 
-                    data.currentPatient(data.rootViewModel.foundData()[data.currentArrayPosition()]);
+                    data.currentPatient(data.rootViewModel.foundHist()[data.currentArrayPosition()]);
                     data.currentTreatment(data.currentPatient().treatment);
 		    
 	       	    ko.utils.arrayForEach(data.currentPatient().comorbidity, function(morb) {
@@ -92,9 +90,9 @@ define(['../accUtils', 'ojs/ojcorerouter', 'knockout', 'ojs/ojbootstrap', "ojs/o
                 this.backward = function (event, data) {
                     data.currentArrayPosition(data.currentArrayPosition()-1);
                     if (data.currentArrayPosition() < 0 ) {
-                        data.currentArrayPosition(data.rootViewModel.foundData().length-1);
+                        data.currentArrayPosition(data.rootViewModel.foundHist().length-1);
                     }
-                    data.currentPatient(data.rootViewModel.foundData()[data.currentArrayPosition()]);
+                    data.currentPatient(data.rootViewModel.foundHist()[data.currentArrayPosition()]);
                     data.currentTreatment(data.currentPatient().treatment);
 
 		    ko.utils.arrayForEach(data.currentPatient().comorbidity, function(morb) {
@@ -105,88 +103,12 @@ define(['../accUtils', 'ojs/ojcorerouter', 'knockout', 'ojs/ojbootstrap', "ojs/o
                     data.currentMorbs(data.currentPatient().comorbidity);
                 }
 
-
-                this.cancelHistory = function () {
-                    let popup = document.getElementById("searchcountpopup1");
-                    popup.close();
-                }
-
-
-		this.history = function (event,data){
-			let popup = document.getElementById("searchcountpopup1");
-                        popup.open("#btnSearch");
-                        self.suchergebnis("Führe Query aus & zähle Ergebnisse\n");
-
-                        self.localCountUrl = "/edge/psaq/patient/qbe/history/count";
-                        self.distCountUrl = "/core/radiq/patients/distqbe/history/count";
-                        if (self.suchtyp() == "lokal") {
-                            self.countUrl = self.localCountUrl;
-                        } else {
-                            self.countUrl = self.distCountUrl;
-                        }
-
-			let qbeString = '{"identifyingData":{"patientPseudonym":"'+data.currentPatient().identifyingData.patientPseudonym+'"}}';
-			console.log (qbeString);
-                        $.ajax({
-                            url: self.countUrl,
-                            type: "POST",
-                            data: qbeString,
-                            contentType: "application/json",
-                            async: true,
-                            cache: false,
-                            success: function (result) {
-                                console.log(result);
-                                tmp = self.suchergebnis();
-                                rows = ko.observable(0);
-                                if (self.suchtyp() == "lokal") {
-                                    self.suchergebnis(tmp + "\nDatensätze in Historie gefunden: " + result.numFound);
-                                } else {
-                                    result.forEach(function (element) {
-                                        self.suchergebnis(self.suchergebnis() + "\nPartner: " + element.partnerName + " - " + element.status );
-                                        rows(rows() + element.numTotal);
-                                    })
-                                    self.suchergebnis(self.suchergebnis() + "\nDatensätze gefunden: " + rows());
-                                }
-                            }
-                        });
+		this.zurueck = function (event,data){
+	           data.rootViewModel.foundHist([]);
+		   data.rootViewModel.router.go({path: 'darstellung'});
                 }
                 
 
-                this.historyCont = function (event,data) {
-                    self.localqbeUrl = "/edge/psaq/patient/qbe/history/search";
-                    self.distqbeUrl = "/core/radiq/patients/distqbe/history/search";
-                    if (self.suchtyp() == "lokal") {
-                        self.countUrl = self.localqbeUrl;
-                    } else {
-                        self.countUrl = self.distqbeUrl;
-                    }
-
-                    self.suchergebnis("Lade gefundene Daten herunter");
-
-                    $.ajax({
-                        url: self.countUrl,
-                        type: "POST",
-                        data: qbeString,
-                        contentType: "application/json",
-                        async: false,
-                        cache: false,
-                        success: function (result) {
-
-                            console.log(result);
-                            var rootViewModel = ko.dataFor(document.getElementById('globalBody'));
-                            if (self.suchtyp() == "lokal") {
-                                rootViewModel.foundHist(result);
-                                rootViewModel.searchType("lokal");
-                            } else {
-                                rootViewModel.foundHist(result.results);
-                                rootViewModel.searchType("dist");
-                            }
-                            let popup = document.getElementById("searchcountpopup1");
-                            popup.close();
-                            rootViewModel.router.go({path: 'historie'});
-                        }
-                    });
-		}
             }
 
             /*

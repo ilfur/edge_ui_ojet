@@ -4,7 +4,7 @@
  as shown at https://oss.oracle.com/licenses/upl/
 -->
 <div class="oj-hybrid-padding">
-    <h4 class="oj-header-border">Forschungsdaten darstellen - Patient <oj-bind-text value="[[ currentArrayPosition()+1 ]]"></oj-bind-text><oj-bind-text value="/"></oj-bind-text><oj-bind-text value="[[ rootViewModel.foundData().length ]]"></oj-bind-text></h4>
+    <h4 class="oj-header-border">Patient Historie <oj-bind-text value="[[ currentArrayPosition()+1 ]]"></oj-bind-text><oj-bind-text value="/"></oj-bind-text><oj-bind-text value="[[ rootViewModel.foundHist().length ]]"></oj-bind-text></h4>
     <div class="oj-flex  oj-typography-body-xs">
         <oj-form-layout class="oj-flex-item oj-formlayout-full-width">
             <div class="oj-panel oj-flex-item oj-flex  oj-sm-align-items-center oj-panel-shadow-sm " >
@@ -14,8 +14,8 @@
                 <oj-button  class="oj-flex-item oj-typography-subheading-md"  on-oj-action="[[forward]]" >
                     <span role="img" class="oj-ux-ico-fast-forward" title="Nächster Patient" alt="Nächster Patient"></span>
                 </oj-button>
-                <oj-button  class="oj-flex-item oj-typography-subheading-md" on-oj-action="[[history]]" >
-                    <span role="img" class="oj-ux-ico-clock-history" title="Patienten-Verlauf" alt="Patienten-Verlauf"></span>
+                <oj-button  class="oj-flex-item oj-typography-subheading-md" on-oj-action="[[zurueck]]" >
+                    <span role="img" class="oj-ux-ico-backspace" title="Zurück zum Suchergebnis" alt="Zurück zum Suchergebnis"></span>
                 </oj-button>
                  
             </div>
@@ -118,38 +118,3 @@
         </oj-form-layout>
         </div>
     </div>
-    <div id="popupCountWrapper">
-    <oj-popup
-        id="searchcountpopup1"
-        class="demo-popup"
-        auto-dismiss="none"
-        modality="modal"
-        position.my.horizontal="center"
-        position.my.vertical="center"
-        position.at.horizontal="center"
-        position.at.vertical="center"
-        position.of="window"
-        tail="none">
-        <div class="demo-popup-body">
-
-            <div class="demo-popup-content oj-sm-padding-2x" style="min-width: 60vH;">
-                <oj-text-area label-hint="info" readonly="true" value="[[suchergebnis]]" rows="7"></oj-text-area>
-            </div>
-            <div class="demo-popup-header">
-                <oj-button
-                    id="btnCancel"
-                    display="icons"
-                    on-oj-action="[[cancelHistory]]">
-                    <oj-bind-text>Zurück</oj-bind-text>
-                </oj-button>
-                <oj-button
-                    id="btnShow"
-                    display="icons"
-                    on-oj-action="[[historyCont]]">
-                    <oj-bind-text>Details einsehen</oj-bind-text>
-                </oj-button>
-            </div>
-        </div>
-    </oj-popup>
-    </div>
-

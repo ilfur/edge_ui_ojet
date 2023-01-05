@@ -157,7 +157,7 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
                         } else {
                             qbeString = qbeString + ',';
                         }
-                        qbeString = qbeString + '"pseudonymId": "' + data.pseudonymId() + '"'
+                        qbeString = qbeString + '"patientPseudonym": "' + data.pseudonymId() + '"'
                         enteredSomething = true;
                     }
 
@@ -385,8 +385,10 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
                             var rootViewModel = ko.dataFor(document.getElementById('globalBody'));
                             if (self.suchtyp() == "lokal") {
                                 rootViewModel.foundData(result);
+                                rootViewModel.searchType("lokal");
                             } else {
                                 rootViewModel.foundData(result.results);
+                                rootViewModel.searchType("dist");
                             }
                             let popup = document.getElementById("searchcountpopup1");
                             popup.close();

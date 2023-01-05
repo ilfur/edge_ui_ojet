@@ -33,6 +33,7 @@ define(['knockout', 'keycloak', 'ojs/ojcontext', 'ojs/ojmodule-element-utils', '
       let navData = [
         { path: '', redirect: 'ueber' },
         { path: 'darstellung', detail: { label: 'Forschungsdaten darstellen', iconClass: 'oj-ux-ico-information-s' } },
+        { path: 'historie', detail: { label: 'Forschungsdaten-Historie darstellen', iconClass: 'oj-ux-ico-information-s' } },
         { path: 'ueber', detail: { label: 'Über', iconClass: 'oj-ux-ico-information-s' } },
         { path: 'infos', detail: { label: 'Infos', iconClass: 'oj-ux-ico-bar-chart' } },
         { path: 'registrierung', detail: { label: 'Forschungsdaten freigeben', iconClass: 'oj-ux-ico-fire' } },
@@ -50,8 +51,8 @@ define(['knockout', 'keycloak', 'ojs/ojcontext', 'ojs/ojmodule-element-utils', '
       this.selection = new KnockoutRouterAdapter(this.router);
 
       // Setup the navDataProvider with the routes, excluding the first redirected
-      // route.
-      this.navDataProvider = new ArrayDataProvider(navData.slice(2), {keyAttributes: "path"});
+      // route, and the hidden routes for displaying data and history.
+      this.navDataProvider = new ArrayDataProvider(navData.slice(3), {keyAttributes: "path"});
 
       // Header
       // Application Name used in Branding Area
@@ -59,7 +60,9 @@ define(['knockout', 'keycloak', 'ojs/ojcontext', 'ojs/ojmodule-element-utils', '
       // User Info used in Global Navigation area
       this.userLogin = ko.observable("anonymous");
       this.statusTxt = ko.observable("");
+      this.searchType = ko.observable("");
       this.foundData = ko.observableArray([]);
+      this.foundHist = ko.observableArray([]);
 
 
 
