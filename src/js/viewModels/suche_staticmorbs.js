@@ -8,10 +8,10 @@
 /*
  * Your customer ViewModel code goes here
  */
-define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytreedataprovider", 'ojs/ojcollectiondataprovider', "ojs/ojknockout-model", "ojs/ojkeyset",
+define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytreedataprovider", 'ojs/ojcollectiondataprovider', "ojs/ojknockout-model", "ojs/ojkeyset", "comorbLookup",
     "searchFactory", "ojs/ojarraydataprovider", "ojs/ojlistdataproviderview", 'ojs/ojcorerouter', "ojs/ojselectcombobox", "ojs/ojselectsingle", "ojs/ojknockout", "ojs/ojlistview", "ojs/ojradioset",
     "ojs/ojformlayout", "ojs/ojslider", "ojs/ojbutton", "ojs/ojaccordion", "ojs/ojdatetimepicker", "ojs/ojlabel", "ojs/ojpopup"],
-        function (accUtils, ko, exports, ojbootstrap_1, ArrayTreeDataProvider, CollectionDataProvider, KnockoutUtils, ojkeyset_1,  
+        function (accUtils, ko, exports, ojbootstrap_1, ArrayTreeDataProvider, CollectionDataProvider, KnockoutUtils, ojkeyset_1, ComorbLookup, 
                   searchFactory, ArrayDataProvider, ListDataProviderView, CoreRouter) {
             function CustomerViewModel() {
                 // Below are a set of the ViewModel methods invoked by the oj-module component.
@@ -62,15 +62,13 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
                 this.smokingStatus = ko.observable("");
                 this.dateOfFirstSymptoms = ko.observable("");
                 this.dateOfFirstSymptomsComp = ko.observable("$gt");
-		this.weightFrom = ko.observable("");
-		this.weightTo = ko.observable("");
                 this.preName = ko.observable("");
                 this.sureName = ko.observable("");
                 this.birthName = ko.observable("");
                 this.birthDate = ko.observable("");
                 this.birthPlace = ko.observable("");
 
-                //this.medDatasource = ko.observable();
+                this.medDatasource = ko.observable();
 
 
                 this.morbs = ko.observableArray([]);
@@ -79,11 +77,8 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
                 });
                 this.morbsAnd = ko.observable("$or");
 
-                //this.comorbData = ComorbLookup;
-                this.comorbCollection = searchFactory.createComorbsCollection();
-                this.comorbCollection.fetch();
-                this.comorbDataArr = KnockoutUtils.map(this.comorbCollection, null, true);
-                this.comorbsource = new ArrayDataProvider(this.comorbDataArr, {keyAttributes: 'comId'});
+                this.comorbData = ComorbLookup;
+                this.comorbsource = new ArrayDataProvider(this.comorbData, {keyAttributes: 'komid'});
 
                 this.theras = ko.observableArray([
                 ]);
@@ -112,8 +107,8 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
                 this.mapMorbFields = (item) => {
                     const data = item.data;
                     const mappedItem = {
-                        data: {label: data.comName(), value: data.comId()},
-                        metadata: {key: data.comName()},
+                        data: {label: data.label, value: data.komid},
+                        metadata: {key: data.komid},
                     };
                     return mappedItem;
                 };
@@ -135,8 +130,6 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
                     data.birthDate("");
                     data.birthPlace("");
                     data.morbs([]);
-	            data.weightFrom("");
-		    data.weightTo("");
                 }
 
                 this.searchButtonClicked = function (event, data) {
@@ -239,20 +232,6 @@ define(['../accUtils', "knockout", "exports", "ojs/ojbootstrap", "ojs/ojarraytre
                         enteredSomething = true;
                         enteredBasisData = true;
                     }
-
-                    if (!data.weightFrom() == "") {
-                        //data.search.basisData.gender = data.gender();
-                        if (enteredSomething) {
-                            qbeString = qbeString + ','; //end of identifyingData section
-                        }
-                        if (!enteredBasisData) {
-                            qbeString = qbeString + '"basisData": {';
-                        }
-                        qbeString = qbeString + '"bloodPressure" : { "koerpergewicht" : { "$between" : [ ' + data.weightFrom() + ' , ' + data.weightTo() + '] }}';
-                        enteredSomething = true;
-                        enteredBasisData = true;
-                    }
-
 
                     if (!data.dateOfFirstSymptoms() == "") {
                         //data.search.basisData.gender = data.gender();

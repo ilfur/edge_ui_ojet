@@ -62,6 +62,7 @@ define(['knockout', 'keycloak', 'ojs/ojcontext', 'ojs/ojmodule-element-utils', '
       this.foundData = ko.observableArray([]);
 
 
+
 	     this.keycloak = Keycloak();
 	     this.keycloak.onAuthSuccess = function () {
 		             this.statusTxt = ko.observable("Auth Success");

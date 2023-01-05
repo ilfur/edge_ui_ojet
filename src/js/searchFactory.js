@@ -2,6 +2,21 @@ define(['ojs/ojcore'], function (oj) {
     var SearchFactory = {
         resourceUrl : '/edge/fpa/lookup', 
         qbeUrl : '/edge/psaq/patient/qbe/search',
+        createComorbsModel : function () {
+            var comorb = oj.Model.extend( {
+                urlRoot : this.resourceUrl+"/comorbidities", 
+                idAttribute : "comId"
+            });
+            return new comorb();
+        },
+        createComorbsCollection : function () {
+            var comorbs = oj.Collection.extend( {
+                url : this.resourceUrl+"/comorbidities", 
+                model : this.createComorbsModel(), 
+                comparator : "comName"
+            });
+            return new comorbs();
+        },
         createMedModel : function () {
             var med = oj.Model.extend( {
                 urlRoot : this.resourceUrl+"/medications", 

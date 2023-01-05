@@ -6,11 +6,10 @@
 
 
 
-define(['../accUtils', 'ojs/ojcorerouter', 'knockout', 'ojs/ojbootstrap', "ojs/ojarraytreedataprovider", "ojs/ojarraydataprovider", "ojs/ojknockouttemplateutils",
+define(['../accUtils', 'ojs/ojcorerouter', 'knockout', 'ojs/ojbootstrap', "ojs/ojarraytreedataprovider", "ojs/ojarraydataprovider", "ojs/ojknockouttemplateutils", 
     "ojs/ojcollapsible", "ojs/ojslider", "ojs/ojformlayout", "ojs/ojbutton", "ojs/ojlabel", "ojs/ojdrawerlayout", "ojs/ojknockout", "ojs/ojtreeview"],
         function (accUtils, CoreRouter, ko, Bootstrap, ArrayTreeDataProvider, ArrayDataProvider, KnockoutTemplateUtils) {
             function DarstellungViewModel() {
-                 "use strict";
                 var self = this;
                 // Below are a set of the ViewModel methods invoked by the oj-module component.
                 // Please reference the oj-module jsDoc for additional information.
@@ -45,24 +44,46 @@ define(['../accUtils', 'ojs/ojcorerouter', 'knockout', 'ojs/ojbootstrap', "ojs/o
                 };
 
                 this.rootViewModel = ko.dataFor(document.getElementById('globalBody'));
-                //this.foundData = rootViewModel.foundData;
-                //console.log(this.foundData());
 
-                
-                
                 this.currentArrayPosition = ko.observable(0);
                 this.currentPatient = ko.observable(this.rootViewModel.foundData()[this.currentArrayPosition()]);
                 this.currentMorbs = ko.observableArray(this.currentPatient().comorbidity);
                 this.currentTreatment = ko.observableArray(this.currentPatient().treatment);
+
+		this.comorbCollection = ko.observableArray([]);
+
+		$.ajax({
+                      url: "/edge/fpa/lookup/comorbidities",
+                      type: "GET",
+                      contentType: "application/json",
+                      //crossDomain: true,
+                      async: false,
+                      cache: false,
+                      success: function (result) {
+                          self.comorbCollection(result);
+                          ko.utils.arrayForEach(self.currentMorbs(), function(morb) {
+                            var found = result.find (item => item.comId == morb.comId);
+                            morb.comName = ko.observable (found.comName);
+                          });
+                      }
+                });
+
                                 
                 this.forward = function (event, data) {
                     data.currentArrayPosition(data.currentArrayPosition()+1);
                     if (data.currentArrayPosition() == data.rootViewModel.foundData().length) {
                         data.currentArrayPosition(0);
                     }
+
                     data.currentPatient(data.rootViewModel.foundData()[data.currentArrayPosition()]);
-                    data.currentMorbs(data.currentPatient().comorbidity);
                     data.currentTreatment(data.currentPatient().treatment);
+		    
+	       	    ko.utils.arrayForEach(data.currentPatient().comorbidity, function(morb) {
+                      var found = self.comorbCollection().find (item => item.comId == morb.comId);
+                      morb.comName = ko.observable (found.comName);
+                    });
+                    
+		    data.currentMorbs(data.currentPatient().comorbidity);
                 }
                 
                 this.backward = function (event, data) {
@@ -71,8 +92,14 @@ define(['../accUtils', 'ojs/ojcorerouter', 'knockout', 'ojs/ojbootstrap', "ojs/o
                         data.currentArrayPosition(data.rootViewModel.foundData().length-1);
                     }
                     data.currentPatient(data.rootViewModel.foundData()[data.currentArrayPosition()]);
-                    data.currentMorbs(data.currentPatient().comorbidity);
                     data.currentTreatment(data.currentPatient().treatment);
+
+		    ko.utils.arrayForEach(data.currentPatient().comorbidity, function(morb) {
+                      var found = self.comorbCollection().find (item => item.comId == morb.comId);
+                      morb.comName = ko.observable (found.comName);
+                    });
+
+                    data.currentMorbs(data.currentPatient().comorbidity);
                 }
                 
                 
