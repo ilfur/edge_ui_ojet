@@ -36,7 +36,7 @@ define(['knockout', 'keycloak', 'ojs/ojcontext', 'ojs/ojmodule-element-utils', '
         { path: 'historie', detail: { label: 'Forschungsdaten-Historie darstellen', iconClass: 'oj-ux-ico-information-s' } },
         { path: 'ueber', detail: { label: 'Über', iconClass: 'oj-ux-ico-information-s' } },
         { path: 'infos', detail: { label: 'Infos', iconClass: 'oj-ux-ico-bar-chart' } },
-        { path: 'registrierung', detail: { label: 'Forschungsdaten freigeben', iconClass: 'oj-ux-ico-fire' } },
+        { path: 'registrierung', detail: { label: 'Forschungsdaten ergänzen', iconClass: 'oj-ux-ico-fire' } },
         { path: 'suche', detail: { label: 'Forschungsdaten abfragen', iconClass: 'oj-ux-ico-contact-group' } },
         { path: 'admin', detail: { label: 'Admin', iconClass: 'oj-ux-ico-build' } }
       ];
@@ -62,6 +62,7 @@ define(['knockout', 'keycloak', 'ojs/ojcontext', 'ojs/ojmodule-element-utils', '
       this.statusTxt = ko.observable("");
       this.searchType = ko.observable("");
       this.foundData = ko.observableArray([]);
+      this.foundPosition = ko.observable(0);
       this.foundHist = ko.observableArray([]);
 
 

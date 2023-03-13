@@ -1,0 +1,242 @@
+<!--
+ Copyright (c) 2014, 2021, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+-->
+<div class="oj-hybrid-padding">
+    <h4 class="oj-header-border">Forschungsdaten darstellen - Patient <oj-bind-text value="[[ currentArrayPosition()+1 ]]"></oj-bind-text><oj-bind-text value="/"></oj-bind-text><oj-bind-text value="[[ rootViewModel.foundData().length ]]"></oj-bind-text></h4>
+    <div class="oj-flex  oj-typography-body-xs">
+        <oj-form-layout class="oj-flex-item oj-formlayout-full-width">
+            <div class="oj-panel oj-flex-item oj-flex  oj-sm-align-items-center oj-panel-shadow-sm " >
+                <oj-button  class="oj-flex-item oj-typography-subheading-md"  on-oj-action="[[backward]]" >
+                    <span role="img" class="oj-ux-ico-rewind" title="Voriger Patient" alt="Voriger Patient" ></span>
+                </oj-button>
+                <oj-button  class="oj-flex-item oj-typography-subheading-md"  on-oj-action="[[forward]]" >
+                    <span role="img" class="oj-ux-ico-fast-forward" title="Nächster Patient" alt="Nächster Patient"></span>
+                </oj-button>
+                <oj-button  class="oj-flex-item oj-typography-subheading-md" on-oj-action="[[history]]" >
+                    <span role="img" class="oj-ux-ico-clock-history" title="Patienten-Verlauf" alt="Patienten-Verlauf"></span>
+                </oj-button>
+                 
+            </div>
+
+            <div class="oj-panel oj-flex oj-flex-item oj-panel-shadow-sm" >
+
+                <div class="oj-panel oj-flex oj-flex-item oj-sm-flex-direction-column" >
+                  <oj-accordion>
+                    <oj-collapsible>
+                    <h4 slot="header">
+                        Identifizierende Daten
+                    </h4>
+                    <div  class="oj-flex-item oj-flex oj-panel">
+			 <div class="oj-flex-item oj-flex oj-sm-8">
+			    <div class="oj-flex-item oj-sm-2"><oj-bind-text value="PatNr:"></oj-bind-text></div><div class="oj-flex-item oj-sm-4"><oj-bind-text  value='[[ currentPatient().identifyingData.kisIdentifier ]]'></oj-bind-text></div><br/>
+			 </div>
+			 <div class="oj-flex-item oj-flex oj-sm-8">
+			    <div class="oj-flex-item oj-sm-2"><oj-bind-text value="Pseudonym-ID:"></oj-bind-text></div><div class="oj-flex-item oj-sm-4"><oj-bind-text  value='[[ currentPatient().identifyingData.patientPseudonym ]]'></oj-bind-text></div><br/>
+			 </div>
+			 <div class="oj-flex-item oj-flex oj-sm-8">
+			    <div class="oj-flex-item oj-sm-2"><oj-bind-text value="Geburtstag:"></oj-bind-text></div><div class="oj-flex-item oj-sm-4"><oj-bind-text  value='[[ currentPatient().identifyingData.dateOfBirth ]]'></oj-bind-text></div><br/>
+			 </div>
+			 <div class="oj-flex-item oj-flex oj-sm-8">
+			    <div class="oj-flex-item oj-sm-2"><oj-bind-text value="Nachname, Vorname:"></oj-bind-text></div><div class="oj-flex-item oj-sm-4"><oj-bind-text  value='[[ currentPatient().identifyingData.name ]]'></oj-bind-text>, <oj-bind-text value='[[ currentPatient().identifyingData.preName ]]'></oj-bind-text></div>
+			 </div>
+			 <div class="oj-flex-item oj-flex oj-sm-8">
+			    <div class="oj-flex-item oj-sm-2"><oj-bind-text value="Geburtsname:"></oj-bind-text></div><div class="oj-flex-item oj-sm-4"><oj-bind-text  value='[[ currentPatient().identifyingData.maidenName ]]'></oj-bind-text></div><br/>
+			 </div>
+			 <div class="oj-flex-item oj-flex oj-sm-8">
+			    <div class="oj-flex-item oj-sm-2"><oj-bind-text value="Geburtsort:"></oj-bind-text></div><div class="oj-flex-item oj-sm-4"><oj-bind-text  value='[[ currentPatient().identifyingData.birthPlace ]]'></oj-bind-text></div><br/>
+			 </div>
+                    </div>
+                    </oj-collapsible>
+                    <oj-collapsible>
+                    <h4 slot="header">
+                        Basisdaten
+                    </h4>
+                    <div  class="oj-flex-item oj-flex oj-panel oj-sm-flex-direction-row">
+		       <div class="oj-flex-item oj-flex oj-panel oj-sm-flex-direction-column">
+			 <div class="oj-flex-item oj-flex ">
+				 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="Erste Symptome:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().basisData.dateOfFirstSymptoms ]]'></oj-bind-text></div>
+			 </div>
+			 <div class="oj-flex-item oj-flex">
+				 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="Staatsangehörigkeit:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text class="oj-sm-padding-4x-start" value='[[ currentPatient().basisData.ethnicity ]]'></oj-bind-text><oj-bind-if test="[[ currentPatient().basisData.ethnicity == 1 ]]"> - deutsch</oj-bind-if></div>
+			 </div>
+		       </div>
+		       <div class="oj-flex-item oj-flex oj-panel oj-sm-flex-direction-column">
+		         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="Geschlecht:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-if test="[[ currentPatient().basisData.gender == 1 ]]">männlich</oj-bind-if>
+                                <oj-bind-if test="[[ currentPatient().basisData.gender == 2 ]]">weiblich</oj-bind-if>
+                                <oj-bind-if test="[[ currentPatient().basisData.gender == 3 ]]">divers</oj-bind-if></div>
+                         </div>
+			 <div class="oj-flex-item oj-flex">
+				 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="Körpergröße:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().basisData.height ]]'></oj-bind-text></div>
+			 </div>
+			 <div class="oj-flex-item oj-flex">
+				 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="Körpergewicht:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().basisData.weight ]]'></oj-bind-text></div>
+			 </div>
+		       </div>
+		         <div class="oj-flex-item oj-flex oj-panel oj-sm-flex-direction-column">
+			   <div class="oj-flex-item oj-flex ">
+			  	 <div class="oj-flex-item oj-sm-4"><oj-bind-text value="Puls:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().basisData.bloodPressure.pulse ]]'></oj-bind-text></div>
+			   </div>
+			   <div class="oj-flex-item oj-flex ">
+				 <div class="oj-flex-item oj-sm-4"><oj-bind-text value="Systole links:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().basisData.bloodPressure.systoleLeft ]]'></oj-bind-text></div>
+			   </div>
+			   <div class="oj-flex-item oj-flex ">
+				 <div class="oj-flex-item oj-sm-4"><oj-bind-text value="Diastole links:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().basisData.bloodPressure.diastoleLeft ]]'></oj-bind-text></div>
+			   </div>
+		         </div>
+                    </div>
+                    </oj-collapsible>
+                    <oj-collapsible>
+                    <h4 slot="header">
+                        Komorbiditäten
+                    </h4>
+                    <div  >
+                             <div class="oj-flex-item oj-flex oj-panel oj-bg-neutral-10">
+                                <div class="oj-flex-item oj-sm-2"><oj-bind-text  value="Bezeichnung"></oj-bind-text></div>
+                                <div class="oj-flex-item oj-sm-8"><oj-bind-text  value="Kommentar"></oj-bind-text></div>
+                                <div class="oj-flex-item oj-sm-2"><oj-bind-text  value="Seit"></oj-bind-text></div>
+                            </div>
+
+                            <oj-bind-for-each data="[[ currentMorbs ]]">
+                              <template>
+                                  <div class="oj-flex-item oj-flex oj-panel">
+				    <div class="oj-flex-item  oj-sm-2"><oj-bind-text value="[[ $current.data.comName ]]"></oj-bind-text></div>
+                                    <div class="oj-flex-item  oj-sm-8"><oj-bind-text value="[[ $current.data.comNote ]]"></oj-bind-text></div>
+                                    <div class="oj-flex-item  oj-sm-2"><oj-bind-text value="[[ $current.data.comSince ]]"></oj-bind-text></div>
+                                  </div>
+                              </template>
+                            </oj-bind-for-each>
+                    </div>
+                    </oj-collapsible>
+                    <oj-collapsible>
+                    <h4 slot="header">
+                        Medikation
+                    </h4>
+                    <div>
+                                  <div class="oj-flex-item oj-flex oj-panel oj-bg-neutral-10">
+                                      <div class="oj-flex-item oj-sm-2"><oj-bind-text  value="Präparat"></oj-bind-text></div>
+                                      <div class="oj-flex-item oj-sm-2"><oj-bind-text  value="Dosis"></oj-bind-text></div>
+                                      <div class="oj-flex-item oj-sm-2"><oj-bind-text  value="Einheit"></oj-bind-text></div>
+                                      <div class="oj-flex-item oj-sm-2"><oj-bind-text  value="Intervall"></oj-bind-text></div>
+                                      <div class="oj-flex-item oj-sm-2"><oj-bind-text  value="seit"></oj-bind-text></div>
+                                      <div class="oj-flex-item oj-sm-2"><oj-bind-text  value="beendet"></oj-bind-text></div>
+                                  </div>
+                            <oj-bind-for-each data="[[ currentTreatment ]]">
+                              <template>
+                                  <div class="oj-flex-item oj-flex oj-panel">
+					  <div class="oj-flex-item oj-sm-2"><oj-bind-if test="[[ $current.data.hasOwnProperty('med') ]]"><oj-bind-text  value="[[ $current.data.med.name ]]"></oj-bind-text></oj-bind-if></div>
+                                      <div class="oj-flex-item oj-sm-2"><oj-bind-text  value="[[ $current.data.medicationDosis ]]"></oj-bind-text></div>
+                                      <div class="oj-flex-item oj-sm-2"><oj-bind-if test="[[ $current.data.hasOwnProperty('med') ]]"><oj-bind-text  value="[[ $current.data.med.unit ]]"></oj-bind-text></oj-bind-if></div>
+				      <div class="oj-flex-item oj-sm-2"><oj-bind-if test="[[ $current.data.hasOwnProperty('med') ]]"><oj-bind-text  value="[[ $current.data.med.interval ]]"></oj-bind-text></oj-bind-if></div>
+                                      <div class="oj-flex-item oj-sm-2"><oj-bind-text  value="[[ $current.data.medicationSince ]]"></oj-bind-text></div>
+                                      <div class="oj-flex-item oj-sm-2"><oj-bind-text  value="[[ $current.data.finished ]]"></oj-bind-text></div>
+                                  </div>
+                              </template>
+                            </oj-bind-for-each>
+                    </div>
+                    </oj-collapsible>
+                    <oj-collapsible>
+                    <h4 slot="header">
+                        Labordaten
+                    </h4>
+                     <div  class="oj-flex-item oj-flex oj-panel oj-sm-flex-direction-row">
+                       <div class="oj-flex-item oj-flex oj-panel oj-sm-flex-direction-column">
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="Erfassungsdatum:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().labDatum.dateOfCollection ]]'></oj-bind-text></div>
+                         </div>
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="C3C4:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().labDatum.c3c4 ]]'></oj-bind-text></div>
+                         </div>
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="CRP2005:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().labDatum.crp2005 ]]'></oj-bind-text></div>
+                         </div>
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="DSDNS:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().labDatum.dsdns ]]'></oj-bind-text></div>
+                         </div>
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="Rheumafaktor:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().labDatum.rheumafaktor ]]'></oj-bind-text></div>
+                         </div>
+                       </div>
+                     </div>
+                    </oj-collapsible>
+                    <oj-collapsible>
+                    <h4 slot="header">
+                        Patienten-Modul
+                    </h4>
+                     <div  class="oj-flex-item oj-flex oj-panel oj-sm-flex-direction-row">
+                       <div class="oj-flex-item oj-flex oj-panel oj-sm-flex-direction-column">
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="Erfassungsdatum:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().patientModule.dateOfCollection ]]'></oj-bind-text></div>
+                         </div>
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="Schmerzgrad letzte 7 Tage:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().patientModule.painLast7Days ]]'></oj-bind-text></div>
+                         </div>
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="Beschäftigungsart:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().patientModule.currentOccupationalPosition ]]'></oj-bind-text></div>
+                         </div>
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="Renten-Art:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().patientModule.typeOfRetirement ]]'></oj-bind-text></div>
+                         </div>
+                       </div>
+                     </div>
+                    </oj-collapsible>
+                    <oj-collapsible>
+                    <h4 slot="header">
+                        Therapeuten-Modul
+                    </h4>
+		     <div  class="oj-flex-item oj-flex oj-panel oj-sm-flex-direction-row">
+                       <div class="oj-flex-item oj-flex oj-panel oj-sm-flex-direction-column">
+			 <oj-bind-if test="[[ currentPatient().physicianModule.hasOwnProperty('SLEDAI') ]]">
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="SLEDAI Erfassungsdatum:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().physicianModule.SLEDAI.dateOfCollection ]]'></oj-bind-text></div>
+                         </div>
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="SLEDAI Score:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().physicianModule.SLEDAI.sledai_score ]]'></oj-bind-text></div>
+                         </div>
+			 </oj-bind-if>
+                       </div>
+		     </div>
+                    </oj-collapsible>
+                  </oj-accordion>
+                </div>
+            </div>
+        </oj-form-layout>
+        </div>
+    </div>
+    <div id="popupCountWrapper">
+    <oj-popup
+        id="searchcountpopup1"
+        class="demo-popup"
+        auto-dismiss="none"
+        modality="modal"
+        position.my.horizontal="center"
+        position.my.vertical="center"
+        position.at.horizontal="center"
+        position.at.vertical="center"
+        position.of="window"
+        tail="none">
+        <div class="demo-popup-body">
+
+            <div class="demo-popup-content oj-sm-padding-2x" style="min-width: 60vH;">
+                <oj-text-area label-hint="info" readonly="true" value="[[suchergebnis]]" rows="7"></oj-text-area>
+            </div>
+            <div class="demo-popup-header">
+                <oj-button
+                    id="btnCancel"
+                    display="icons"
+                    on-oj-action="[[cancelHistory]]">
+                    <oj-bind-text>Zurück</oj-bind-text>
+                </oj-button>
+                <oj-button
+                    id="btnShow"
+                    display="icons"
+                    on-oj-action="[[historyCont]]">
+                    <oj-bind-text>Details einsehen</oj-bind-text>
+                </oj-button>
+            </div>
+        </div>
+    </oj-popup>
+    </div>
+

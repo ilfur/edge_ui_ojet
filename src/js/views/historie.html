@@ -4,6 +4,35 @@
  as shown at https://oss.oracle.com/licenses/upl/
 -->
 <div class="oj-hybrid-padding">
+    <h4>Zeitleiste</h4>
+      <div class="oj-flex  oj-typography-body-xs">
+            <oj-timeline
+                id="tline"
+                data-bind=''
+                minor-axis.scale="days"
+                minor-axis.zoom-order='["weeks", "days", "hours", "minutes"]'
+                major-axis.scale="hours"
+                start='[[calStartDate]]'
+                end='[[calEndDate]]'
+                selection-mode="single"
+                orientation="horizontal"
+                overview.rendered="on"
+                reference-objects="[[referenceObjects]]"
+                selection='[]'
+                data="[[timelineProvider]]"
+                class="demo-timeline">
+                <template slot="seriesTemplate" data-oj-as="series">
+                  <oj-timeline-series label="[[series.version]]" empty-text="No Data."></oj-timeline-series>
+                </template>
+                <template slot="itemTemplate" data-oj-as="item">
+                  <oj-timeline-item
+                    series-id="[[item.data.identifyingData.patientPseudonym]]"
+                    start="[[item.data.modifiedAt]]"
+                    label="Neuer Upload"
+                    description="[[ 'Version: ' + item.data.version ]]"></oj-timeline-item>
+                </template>
+              </oj-timeline>
+      </div>
     <h4 class="oj-header-border">Patient Historie <oj-bind-text value="[[ currentArrayPosition()+1 ]]"></oj-bind-text><oj-bind-text value="/"></oj-bind-text><oj-bind-text value="[[ rootViewModel.foundHist().length ]]"></oj-bind-text></h4>
     <div class="oj-flex  oj-typography-body-xs">
         <oj-form-layout class="oj-flex-item oj-formlayout-full-width">
@@ -17,7 +46,6 @@
                 <oj-button  class="oj-flex-item oj-typography-subheading-md" on-oj-action="[[zurueck]]" >
                     <span role="img" class="oj-ux-ico-backspace" title="Zurück zum Suchergebnis" alt="Zurück zum Suchergebnis"></span>
                 </oj-button>
-                 
             </div>
 
             <div class="oj-panel oj-flex oj-flex-item oj-panel-shadow-sm" >
@@ -25,31 +53,71 @@
                 <div class="oj-panel oj-flex oj-flex-item oj-sm-flex-direction-column" >
                   <oj-accordion>
                     <oj-collapsible>
-                    <h4 slot="header">
+                    <h4 slot="header" :class="[[ changed(currentPatient().identifyingData , rootViewModel.foundData()[rootViewModel.foundPosition()].identifyingData) ]]">
                         Identifizierende Daten
                     </h4>
-                    <div>
-                            <div class="oj-flex-item oj-flex"><oj-bind-text class="oj-flex-item">PatNr: </oj-bind-text><oj-bind-text  value='[[ currentPatient().identifyingData.kisIdentifier ]]'></oj-bind-text></div>
-                            <div class="oj-flex-item oj-flex"><oj-bind-text class="oj-flex-item">Geburtstag: </oj-bind-text><oj-bind-text  value='[[ currentPatient().identifyingData.dateOfBirth ]]'></oj-bind-text></div>
-                            <div class="oj-flex-item oj-flex"><oj-bind-text class="oj-flex-item">Nachname, Vorname: </oj-bind-text><oj-bind-text  value='[[ currentPatient().identifyingData.name ]]'></oj-bind-text>, <oj-bind-text value='[[ currentPatient().identifyingData.preName ]]'></oj-bind-text></div>
-                            <div class="oj-flex-item oj-flex"><oj-bind-text class="oj-flex-item">Geburtsname: </oj-bind-text><oj-bind-text  value='[[ currentPatient().identifyingData.maidenName ]]'></oj-bind-text></div>
-                            <div class="oj-flex-item oj-flex"><oj-bind-text class="oj-flex-item">Geburtsort: </oj-bind-text><oj-bind-text  value='[[ currentPatient().identifyingData.birthPlace ]]'></oj-bind-text></div>
+                    <div  class="oj-flex-item oj-flex oj-panel">
+                         <div class="oj-flex-item oj-flex oj-sm-8">
+                            <div class="oj-flex-item oj-sm-2"><oj-bind-text value="PatNr:"></oj-bind-text></div><div class="oj-flex-item oj-sm-4"><oj-bind-text  value='[[ currentPatient().identifyingData.kisIdentifier ]]'></oj-bind-text></div><br/>
+                         </div>
+                         <div class="oj-flex-item oj-flex oj-sm-8">
+                            <div class="oj-flex-item oj-sm-2"><oj-bind-text value="Pseudonym-ID:"></oj-bind-text></div><div class="oj-flex-item oj-sm-4"><oj-bind-text  value='[[ currentPatient().identifyingData.patientPseudonym ]]'></oj-bind-text></div><br/>
+                         </div>
+                         <div class="oj-flex-item oj-flex oj-sm-8">
+                            <div class="oj-flex-item oj-sm-2"><oj-bind-text value="Geburtstag:"></oj-bind-text></div><div class="oj-flex-item oj-sm-4"><oj-bind-text  value='[[ currentPatient().identifyingData.dateOfBirth ]]'></oj-bind-text></div><br/>
+                         </div>
+                         <div class="oj-flex-item oj-flex oj-sm-8">
+                            <div class="oj-flex-item oj-sm-2"><oj-bind-text value="Nachname, Vorname:"></oj-bind-text></div><div class="oj-flex-item oj-sm-4"><oj-bind-text  value='[[ currentPatient().identifyingData.name ]]'></oj-bind-text>, <oj-bind-text value='[[ currentPatient().identifyingData.preName ]]'></oj-bind-text></div>
+                         </div>
+                         <div class="oj-flex-item oj-flex oj-sm-8">
+                            <div class="oj-flex-item oj-sm-2"><oj-bind-text value="Geburtsname:"></oj-bind-text></div><div class="oj-flex-item oj-sm-4"><oj-bind-text  value='[[ currentPatient().identifyingData.maidenName ]]'></oj-bind-text></div><br/>
+                         </div>
+                         <div class="oj-flex-item oj-flex oj-sm-8">
+                            <div class="oj-flex-item oj-sm-2"><oj-bind-text value="Geburtsort:"></oj-bind-text></div><div class="oj-flex-item oj-sm-4"><oj-bind-text  value='[[ currentPatient().identifyingData.birthPlace ]]'></oj-bind-text></div><br/>
+                         </div>
                     </div>
                     </oj-collapsible>
                     <oj-collapsible>
-                    <h4 slot="header">
+                    <h4 slot="header" :class="[[ changed(currentPatient().basisData , rootViewModel.foundData()[rootViewModel.foundPosition()].basisData) ]]">
                         Basisdaten
                     </h4>
-                    <div>
-                            <div class="oj-flex-item oj-flex"><oj-bind-text class="oj-flex-item">Erste Symptome: </oj-bind-text><oj-bind-text  value='[[ currentPatient().basisData.dateOfFirstSymptoms ]]'></oj-bind-text></div>
-                            <div class="oj-flex-item oj-flex"><oj-bind-text class="oj-flex-item">Geschlecht: </oj-bind-text><oj-bind-if test="[[ currentPatient().basisData.gender == 1 ]]">weiblich</oj-bind-if>
-                                <oj-bind-if test="[[ currentPatient().basisData.gender == 2 ]]">männlich</oj-bind-if>
+                    <div  class="oj-flex-item oj-flex oj-panel oj-sm-flex-direction-row">
+                       <div class="oj-flex-item oj-flex oj-panel oj-sm-flex-direction-column">
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="Erste Symptome:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().basisData.dateOfFirstSymptoms ]]'></oj-bind-text></div>
+                         </div>
+                         <div class="oj-flex-item oj-flex">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="Staatsangehörigkeit:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text class="oj-sm-padding-4x-start" value='[[ currentPatient().basisData.ethnicity ]]'></oj-bind-text><oj-bind-if test="[[ currentPatient().basisData.ethnicity == 1 ]]"> - deutsch</oj-bind-if></div>
+                         </div>
+                       </div>
+                       <div class="oj-flex-item oj-flex oj-panel oj-sm-flex-direction-column">
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="Geschlecht:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-if test="[[ currentPatient().basisData.gender == 1 ]]">männlich</oj-bind-if>
+                                <oj-bind-if test="[[ currentPatient().basisData.gender == 2 ]]">weiblich</oj-bind-if>
                                 <oj-bind-if test="[[ currentPatient().basisData.gender == 3 ]]">divers</oj-bind-if></div>
-                            <div class="oj-flex-item oj-flex"><oj-bind-text class="oj-flex-item">Staatsangehörigkeit: <oj-bind-text class="oj-sm-padding-4x-start" value='[[ currentPatient().basisData.ethnicity ]]'></oj-bind-text><oj-bind-if test="[[ currentPatient().basisData.ethnicity == 1 ]]"> - deutsch</oj-bind-if></div>
+                         </div>
+                         <div class="oj-flex-item oj-flex">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="Körpergröße:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().basisData.height ]]'></oj-bind-text></div>
+                         </div>
+                         <div class="oj-flex-item oj-flex">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="Körpergewicht:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().basisData.weight ]]'></oj-bind-text></div>
+                         </div>
+                       </div>
+                       <div class="oj-flex-item oj-flex oj-panel oj-sm-flex-direction-column">
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-4"><oj-bind-text value="Puls:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().basisData.bloodPressures[0].pulse ]]'></oj-bind-text></div>
+                         </div>
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-4"><oj-bind-text value="Systole links:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().basisData.bloodPressures[0].systoleLeft ]]'></oj-bind-text></div>
+                         </div>
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-4"><oj-bind-text value="Diastole links:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().basisData.bloodPressures[0].diastoleLeft ]]'></oj-bind-text></div>
+                         </div>
+                       </div>
                     </div>
                     </oj-collapsible>
                     <oj-collapsible>
-                    <h4 slot="header">
+                    <h4 slot="header" :class="[[ changed(currentMorbs() , rootViewModel.foundData()[rootViewModel.foundPosition()].comorbidity) ]]">
                         Komorbiditäten
                     </h4>
                     <div  >
@@ -71,7 +139,7 @@
                     </div>
                     </oj-collapsible>
                     <oj-collapsible>
-                    <h4 slot="header">
+                    <h4 slot="header"  :class="[[ changed(currentTreatment() , rootViewModel.foundData()[rootViewModel.foundPosition()].treatment) ]]">
                         Medikation
                     </h4>
                     <div>
@@ -86,10 +154,10 @@
                             <oj-bind-for-each data="[[ currentTreatment ]]">
                               <template>
                                   <div class="oj-flex-item oj-flex oj-panel">
-					  <div class="oj-flex-item oj-sm-2"><oj-bind-if test="[[ $current.data.hasOwnProperty('med') ]]"><oj-bind-text  value="[[ $current.data.med.name ]]"></oj-bind-text></oj-bind-if></div>
+					  <div class="oj-flex-item oj-sm-2"><oj-bind-text  value="[[ $current.data.medicationName ]]"></oj-bind-text></oj-bind-if></div>
                                       <div class="oj-flex-item oj-sm-2"><oj-bind-text  value="[[ $current.data.medicationDosis ]]"></oj-bind-text></div>
-                                      <div class="oj-flex-item oj-sm-2"><oj-bind-if test="[[ $current.data.hasOwnProperty('med') ]]"><oj-bind-text  value="[[ $current.data.med.unit ]]"></oj-bind-text></oj-bind-if></div>
-				      <div class="oj-flex-item oj-sm-2"><oj-bind-if test="[[ $current.data.hasOwnProperty('med') ]]"><oj-bind-text  value="[[ $current.data.med.interval ]]"></oj-bind-text></oj-bind-if></div>
+                                      <div class="oj-flex-item oj-sm-2"><oj-bind-if test="[[ $current.data.hasOwnProperty('medicationUnit') ]]"><oj-bind-text  value="[[ $current.data.medicationUnit ]]"></oj-bind-text></oj-bind-if></div>
+				      <div class="oj-flex-item oj-sm-2"><oj-bind-if test="[[ $current.data.hasOwnProperty('medicationInterval') ]]"><oj-bind-text  value="[[ $current.data.medicationInterval ]]"></oj-bind-text></oj-bind-if></div>
                                       <div class="oj-flex-item oj-sm-2"><oj-bind-text  value="[[ $current.data.medicationSince ]]"></oj-bind-text></div>
                                       <div class="oj-flex-item oj-sm-2"><oj-bind-text  value="[[ $current.data.finished ]]"></oj-bind-text></div>
                                   </div>
@@ -98,19 +166,66 @@
                     </div>
                     </oj-collapsible>
                     <oj-collapsible>
-                    <h4 slot="header">
+                    <h4 slot="header" :class="[[ changed(currentPatient().labDatum , rootViewModel.foundData()[rootViewModel.foundPosition()].labDatum) ]]">
                         Labordaten
                     </h4>
+                     <div  class="oj-flex-item oj-flex oj-panel oj-sm-flex-direction-row">
+                       <div class="oj-flex-item oj-flex oj-panel oj-sm-flex-direction-column">
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="Erfassungsdatum:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().labDatum.dateOfCollection ]]'></oj-bind-text></div>
+                         </div>
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="C3C4:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().labDatum.c3c4 ]]'></oj-bind-text></div>
+                         </div>
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="CRP2005:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().labDatum.crp2005 ]]'></oj-bind-text></div>
+                         </div>
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="DSDNS:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().labDatum.dsdns ]]'></oj-bind-text></div>
+                         </div>
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="Rheumafaktor:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().labDatum.rheumafaktor ]]'></oj-bind-text></div>
+                         </div>
+                       </div>
+                     </div>
                     </oj-collapsible>
                     <oj-collapsible>
-                    <h4 slot="header">
-                        Historie
+                    <h4 slot="header" :class="[[ changed(currentPatient().patientModule , rootViewModel.foundData()[rootViewModel.foundPosition()].patientModule) ]]">
+                        Patienten-Modul
                     </h4>
+                     <div  class="oj-flex-item oj-flex oj-panel oj-sm-flex-direction-row">
+                       <div class="oj-flex-item oj-flex oj-panel oj-sm-flex-direction-column">
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="Erfassungsdatum:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().patientModule.dateOfCollection ]]'></oj-bind-text></div>
+                         </div>
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="Schmerzgrad letzte 7 Tage:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().patientModule.painLast7Days ]]'></oj-bind-text></div>
+                         </div>
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="Beschäftigungsart:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().patientModule.currentOccupationalPosition ]]'></oj-bind-text></div>
+                         </div>
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="Renten-Art:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().patientModule.typeOfRetirement ]]'></oj-bind-text></div>
+                         </div>
+                       </div>
+                     </div>
                     </oj-collapsible>
                     <oj-collapsible>
-                    <h4 slot="header">
-                        Patient-Modul
+                    <h4 slot="header" :class="[[ changed(currentPatient().physicianModule , rootViewModel.foundData()[rootViewModel.foundPosition()].physicianModule) ]]">
+                        Therapeuten-Modul
                     </h4>
+                     <div  class="oj-flex-item oj-flex oj-panel oj-sm-flex-direction-row">
+                       <div class="oj-flex-item oj-flex oj-panel oj-sm-flex-direction-column">
+                         <oj-bind-if test="[[ !(currentPatient().physicianModule == null) ]]">
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="SLEDAI Erfassungsdatum:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().physicianModule.SLEDAI[0].dateOfCollection ]]'></oj-bind-text></div>
+                         </div>
+                         <div class="oj-flex-item oj-flex ">
+                                 <div class="oj-flex-item oj-sm-3"><oj-bind-text value="SLEDAI Score:"></oj-bind-text></div><div class="oj-flex-item "><oj-bind-text  value='[[ currentPatient().physicianModule.SLEDAI[0].sledai_score ]]'></oj-bind-text></div>
+                         </div>
+                         </oj-bind-if>
+                       </div>
+                     </div>
                     </oj-collapsible>
                   </oj-accordion>
                 </div>

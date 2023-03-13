@@ -6,9 +6,9 @@
 
 
 
-define(['../accUtils', 'ojs/ojcorerouter', 'knockout', 'ojs/ojbootstrap', "ojs/ojarraytreedataprovider", "ojs/ojarraydataprovider", "ojs/ojknockouttemplateutils", 
-    "ojs/ojcollapsible", "ojs/ojslider", "ojs/ojformlayout", "ojs/ojbutton", "ojs/ojlabel", "ojs/ojdrawerlayout", "ojs/ojknockout", "ojs/ojtreeview"],
-        function (accUtils, CoreRouter, ko, Bootstrap, ArrayTreeDataProvider, ArrayDataProvider, KnockoutTemplateUtils) {
+define(['../accUtils', 'ojs/ojcorerouter', 'knockout', 'ojs/ojbootstrap', "ojs/ojarraytreedataprovider", "ojs/ojarraydataprovider", "ojs/ojknockouttemplateutils", "ojs/ojanimation",
+    "ojs/ojcollapsible", "ojs/ojslider", "ojs/ojformlayout", "ojs/ojbutton", "ojs/ojlabel", "ojs/ojdrawerlayout", "ojs/ojknockout", "ojs/ojtreeview", "ojs/ojchart"],
+        function (accUtils, CoreRouter, ko, Bootstrap, ArrayTreeDataProvider, ArrayDataProvider, KnockoutTemplateUtils, AnimationUtils) {
             function DarstellungViewModel() {
                 var self = this;
                 // Below are a set of the ViewModel methods invoked by the oj-module component.
@@ -43,6 +43,50 @@ define(['../accUtils', 'ojs/ojcorerouter', 'knockout', 'ojs/ojbootstrap', "ojs/o
                     // Implement if needed
                 };
 
+		this.animate = function (selector, open, delay) {
+                    const el = document.querySelector(selector);
+                    el.style.transitionDelay = delay;
+                    if (open) {
+                      el.classList.remove("fold-closed");
+                    }
+                    else {
+                      el.classList.add("fold-closed");
+                    }
+                  };
+
+                this.toggle = function () {
+	          console.log("called toggle function...");
+                  const rootElement = document.querySelector(".fold-panel1");
+                  const parentElement = document.querySelector(".fold-panels-parent");
+                  if (rootElement.classList.contains("fold-closed")) {
+                    parentElement.classList.remove("fold-panels-parent-closed");
+                    //var self = this;
+                    var show = function () {
+                      self.animate(".fold-panel1", true, "0ms");
+                      self.animate(".fold-panel2", true, "217ms");
+                      self.animate(".fold-panel3", true, "467ms");
+                      self.animate(".fold-panel4", true, "700ms");
+                    };
+                    setTimeout(() => {
+                      // wait for animation of "fold-panels-parent-closed" to be finished
+                      // and then unfold action panels:
+                      show();
+                      }, 300);
+                  }
+                  else {
+                    self.animate(".fold-panel4", false, "0ms");
+                    self.animate(".fold-panel3", false, "217ms");
+                    self.animate(".fold-panel2", false, "467ms");
+                    self.animate(".fold-panel1", false, "700ms");
+                    setTimeout(() => {
+                      // wait for action panels to get folded and then
+                      // hide the top bar using "fold-panels-parent-closed" animation
+                      parentElement.classList.add("fold-panels-parent-closed");
+                      }, 700);
+
+                  }
+		}
+
                 this.rootViewModel = ko.dataFor(document.getElementById('globalBody'));
 
                 this.currentArrayPosition = ko.observable(0);
@@ -51,9 +95,14 @@ define(['../accUtils', 'ojs/ojcorerouter', 'knockout', 'ojs/ojbootstrap', "ojs/o
                 this.currentMorbs = ko.observableArray(this.currentPatient().comorbidity);
                 this.currentTreatment = ko.observableArray(this.currentPatient().treatment);
 	        this.suchergebnis = ko.observable("");
-
-
 		this.comorbCollection = ko.observableArray([]);
+	        this.bloodPressureCollection = ko.observableArray([]);
+                this.bloodChartProvider = new ArrayDataProvider(this.bloodPressureCollection , { keyAttributes: "datOfCollection" });
+
+		this.pageBusyContext = oj.Context.getPageContext().getBusyContext();
+                this.pageBusyContext.whenReady().then(function () {
+	            self.toggle();
+                });
 
 		$.ajax({
                       url: "/edge/fpa/lookup/comorbidities",
@@ -79,6 +128,7 @@ define(['../accUtils', 'ojs/ojcorerouter', 'knockout', 'ojs/ojbootstrap', "ojs/o
                     }
 
                     data.currentPatient(data.rootViewModel.foundData()[data.currentArrayPosition()]);
+	            data.rootViewModel.foundPosition(data.currentArrayPosition());
                     data.currentTreatment(data.currentPatient().treatment);
 		    
 	       	    ko.utils.arrayForEach(data.currentPatient().comorbidity, function(morb) {
@@ -95,6 +145,7 @@ define(['../accUtils', 'ojs/ojcorerouter', 'knockout', 'ojs/ojbootstrap', "ojs/o
                         data.currentArrayPosition(data.rootViewModel.foundData().length-1);
                     }
                     data.currentPatient(data.rootViewModel.foundData()[data.currentArrayPosition()]);
+	            data.rootViewModel.foundPosition(data.currentArrayPosition());
                     data.currentTreatment(data.currentPatient().treatment);
 
 		    ko.utils.arrayForEach(data.currentPatient().comorbidity, function(morb) {
@@ -111,6 +162,17 @@ define(['../accUtils', 'ojs/ojcorerouter', 'knockout', 'ojs/ojbootstrap', "ojs/o
                     popup.close();
                 }
 
+
+		this.bloodpressures = function (event,data){
+			let popup = document.getElementById("bloodpressurepopup");
+			self.bloodPressureCollection(self.currentPatient().basisData.bloodPressures);
+                        popup.open();
+		}
+
+		this.bloodpressuresClose = function (event,data){
+			let popup = document.getElementById("bloodpressurepopup");
+                        popup.close();
+		}
 
 		this.history = function (event,data){
 			let popup = document.getElementById("searchcountpopup1");
@@ -162,6 +224,8 @@ define(['../accUtils', 'ojs/ojcorerouter', 'knockout', 'ojs/ojbootstrap', "ojs/o
                     }
 
                     self.suchergebnis("Lade gefundene Daten herunter");
+		    let qbeString = '{"identifyingData":{"patientPseudonym":"'+data.currentPatient().identifyingData.patientPseudonym+'"}}';
+                    console.log(qbeString);
 
                     $.ajax({
                         url: self.countUrl,
@@ -194,6 +258,7 @@ define(['../accUtils', 'ojs/ojcorerouter', 'knockout', 'ojs/ojbootstrap', "ojs/o
              * return a constructor for the ViewModel so that the ViewModel is constructed
              * each time the view is displayed.
              */
+
             return DarstellungViewModel;
         }
 );

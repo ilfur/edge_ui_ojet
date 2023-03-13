@@ -7,7 +7,7 @@
 
 
 define(['../accUtils', 'ojs/ojcorerouter', 'knockout', 'ojs/ojbootstrap', "ojs/ojarraytreedataprovider", "ojs/ojarraydataprovider", "ojs/ojknockouttemplateutils", 
-    "ojs/ojtimeline", "ojs/ojcollapsible", "ojs/ojslider", "ojs/ojformlayout", "ojs/ojbutton", "ojs/ojlabel", "ojs/ojdrawerlayout", "ojs/ojknockout", "ojs/ojtreeview"],
+    "ojs/ojcollapsible", "ojs/ojslider", "ojs/ojformlayout", "ojs/ojbutton", "ojs/ojlabel", "ojs/ojdrawerlayout", "ojs/ojknockout", "ojs/ojtreeview"],
         function (accUtils, CoreRouter, ko, Bootstrap, ArrayTreeDataProvider, ArrayDataProvider, KnockoutTemplateUtils) {
             function DarstellungViewModel() {
                 var self = this;
@@ -51,25 +51,8 @@ define(['../accUtils', 'ojs/ojcorerouter', 'knockout', 'ojs/ojbootstrap', "ojs/o
 		console.log(this.currentPatient());
                 this.currentMorbs = ko.observableArray(this.currentPatient().comorbidity);
                 this.currentTreatment = ko.observableArray(this.currentPatient().treatment);
+
 		this.comorbCollection = ko.observableArray([]);
-	
-		this.timelineProvider = new ArrayDataProvider(this.rootViewModel.foundHist(), {
-                  keyAttributes: "version"
-                });
-
-		this.endDate = new Date();
-		this.endDate.setDate(this.endDate.getDate()+1);
-		this.startDate = new Date(this.currentPatient().modifiedAt);
-		this.startDate.setDate(this.startDate.getDate()-1);
-		this.calStartDate = ko.observable(this.startDate.toISOString());
-		this.calEndDate = ko.observable(this.endDate.toISOString());
-
-		this.currentDate = new Date().toISOString();
-		this.referenceObjects = [
-                  {
-                      value: this.currentDate,
-                  },
-                ];
 
 		$.ajax({
                       url: "/edge/fpa/lookup/comorbidities",
@@ -87,25 +70,7 @@ define(['../accUtils', 'ojs/ojcorerouter', 'knockout', 'ojs/ojbootstrap', "ojs/o
                       }
                 });
 
-		this.hashme = function (obj) {
-                   var hc = 0;
-                   var chars = JSON.stringify(obj).replace(/\{|\"|\}|\:|,/g, '');
-                   var len = chars.length;
-                   for (var i = 0; i < len; i++) {
-                       // Bump 7 to larger prime number to increase uniqueness
-                       hc += (chars.charCodeAt(i) * 7);
-                   }
-                   return hc;
-                }
-
-                this.changed = function (object1, object2) {
-                   if (self.hashme(object1) === self.hashme(object2)) {
-			   return "";
-                   } else {
-	                   return "oj-bg-warning-10";
-	           }
-	        }
-		
+                                
                 this.forward = function (event, data) {
                     data.currentArrayPosition(data.currentArrayPosition()+1);
                     if (data.currentArrayPosition() == data.rootViewModel.foundHist().length) {
